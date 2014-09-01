@@ -73,6 +73,37 @@
          </additionnalDependencies>
         </configuration>
       </plugin>
+       <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+        <extensions>true</extensions>
+        <configuration>
+          <unpackBundle>false</unpackBundle>
+          <instructions>
+            <Export-Package>
+              *
+            </Export-Package>
+            <Import-Package>
+              !spinjar*,
+              !org.junit*,
+              javax*;resolution:=optional,
+              *
+            </Import-Package>
+            <Bundle-ClassPath>.</Bundle-ClassPath>
+            <Embed-Dependency>*;inline=true</Embed-Dependency>
+            <Embed-Transitive>true</Embed-Transitive>
+          </instructions>
+        </configuration>
+        <executions>
+          <execution>
+            <id>bundle-manifest</id>
+            <phase>process-classes</phase>
+            <goals>
+              <goal>manifest</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
   </build>
 </project>
