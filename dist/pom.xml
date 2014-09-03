@@ -81,6 +81,7 @@
           <unpackBundle>false</unpackBundle>
           <instructions>
             <Export-Package>
+              !org.slf4j*,
               *
             </Export-Package>
             <Import-Package>
