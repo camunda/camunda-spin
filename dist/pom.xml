@@ -87,6 +87,7 @@
             <Import-Package>
               !spinjar*,
               !org.junit*,
+              !org.slf4j.impl,
               javax*;resolution:=optional,
               *
             </Import-Package>
