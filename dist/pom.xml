@@ -81,14 +81,19 @@
           <unpackBundle>false</unpackBundle>
           <instructions>
             <Export-Package>
-              !org.slf4j*,
-              *
+              ${project.groupId}*
             </Export-Package>
             <Import-Package>
               !spinjar*,
               !org.junit*,
               !org.slf4j.impl,
-              javax*;resolution:=optional,
+              !com.fasterxml*,
+              !com.jayway,
+              !net.minidev.json*,
+              !org.codehaus.jackson*,
+              org.slf4j,
+              org.camunda.commons.utils,
+              org.camunda.commons.logging,
               *
             </Import-Package>
             <Bundle-ClassPath>.</Bundle-ClassPath>
