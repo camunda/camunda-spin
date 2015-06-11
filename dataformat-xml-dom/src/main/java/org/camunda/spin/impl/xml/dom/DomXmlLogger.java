@@ -167,4 +167,9 @@ public class DomXmlLogger extends SpinLogger {
   public SpinXmlDataFormatException unableToSetProperty(String propertyName, String className, Throwable cause) {
     return new SpinXmlDataFormatException(exceptionMessage("033", "Cannot set property '{}' to '{}'", propertyName, className), cause);
   }
+
+  public SpinXmlElementException unableToFindElementWithXPathExpression(String expression) {
+    return new SpinXmlElementException(exceptionMessage("034", "Unable to find element with XPath expression '{}'", expression));
+  }
+
 }

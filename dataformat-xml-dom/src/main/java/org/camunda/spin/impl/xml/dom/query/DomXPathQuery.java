@@ -39,6 +39,8 @@ public class DomXPathQuery extends SpinXPathQuery {
 
   private static final DomXmlLogger LOG = DomXmlLogger.XML_DOM_LOGGER;
 
+  private static final String ROOT_NODE_EXPRESSION = "/";
+
   protected final DomXmlElement domElement;
   protected final XPath query;
   protected final String expression;
@@ -56,8 +58,17 @@ public class DomXPathQuery extends SpinXPathQuery {
   }
 
   public SpinXmlElement element() {
+    if (ROOT_NODE_EXPRESSION.equals(expression)) {
+      // throw an exception for '/' expression
+      throw LOG.unableToFindElementWithXPathExpression(expression);
+    }
+
     try {
       Element element = (Element) query.evaluate(expression, domElement.unwrap(), XPathConstants.NODE);
+      if (element == null) {
+        // throw an exception if element doesn't exist
+        throw LOG.unableToFindElementWithXPathExpression(expression);
+      }
       return dataFormat.createElementWrapper(element);
     } catch (XPathExpressionException e) {
       throw LOG.unableToEvaluateXPathExpressionOnElement(domElement, e);
@@ -69,6 +80,10 @@ public class DomXPathQuery extends SpinXPathQuery {
   public SpinList<SpinXmlElement> elementList() {
     try {
       NodeList nodeList = (NodeList) query.evaluate(expression, domElement.unwrap(), XPathConstants.NODESET);
+      if (nodeList == null || nodeList.getLength() == 0) {
+        // throw an exception if elements don't exist
+        throw LOG.unableToFindElementWithXPathExpression(expression);
+      }
       return new SpinListImpl<SpinXmlElement>(new DomXmlElementIterable(nodeList, dataFormat));
     } catch (XPathExpressionException e) {
       throw LOG.unableToEvaluateXPathExpressionOnElement(domElement, e);
@@ -78,8 +93,17 @@ public class DomXPathQuery extends SpinXPathQuery {
   }
 
   public SpinXmlAttribute attribute() {
+    if (ROOT_NODE_EXPRESSION.equals(expression)) {
+      // throw an exception for '/' expression
+      throw LOG.unableToFindElementWithXPathExpression(expression);
+    }
+
     try {
       Attr attribute = (Attr) query.evaluate(expression, domElement.unwrap(), XPathConstants.NODE);
+      if (attribute == null) {
+        // throw an exception if attribute doesn't exist
+        throw LOG.unableToFindElementWithXPathExpression(expression);
+      }
       return dataFormat.createAttributeWrapper(attribute);
     } catch (XPathExpressionException e) {
       throw LOG.unableToEvaluateXPathExpressionOnElement(domElement, e);
@@ -91,6 +115,10 @@ public class DomXPathQuery extends SpinXPathQuery {
   public SpinList<SpinXmlAttribute> attributeList() {
     try {
       NodeList nodeList = (NodeList) query.evaluate(expression, domElement.unwrap(), XPathConstants.NODESET);
+      if (nodeList == null || nodeList.getLength() == 0) {
+        // throw an exception if attributes don't exist
+        throw LOG.unableToFindElementWithXPathExpression(expression);
+      }
       return new SpinListImpl<SpinXmlAttribute>(new DomXmlAttributeIterable(nodeList, dataFormat));
     } catch (XPathExpressionException e) {
       throw LOG.unableToEvaluateXPathExpressionOnElement(domElement, e);
@@ -100,6 +128,11 @@ public class DomXPathQuery extends SpinXPathQuery {
   }
 
   public String string() {
+    if (ROOT_NODE_EXPRESSION.equals(expression)) {
+      // throw an exception for '/' expression
+      throw LOG.unableToFindElementWithXPathExpression(expression);
+    }
+
     try {
       return (String) query.evaluate(expression, domElement.unwrap(), XPathConstants.STRING);
     } catch (XPathExpressionException e) {
@@ -110,6 +143,11 @@ public class DomXPathQuery extends SpinXPathQuery {
   }
 
   public Double number() {
+    if (ROOT_NODE_EXPRESSION.equals(expression)) {
+      // throw an exception for '/' expression
+      throw LOG.unableToFindElementWithXPathExpression(expression);
+    }
+
     try {
       return (Double) query.evaluate(expression, domElement.unwrap(), XPathConstants.NUMBER);
     } catch (XPathExpressionException e) {
@@ -120,6 +158,11 @@ public class DomXPathQuery extends SpinXPathQuery {
   }
 
   public Boolean bool() {
+    if (ROOT_NODE_EXPRESSION.equals(expression)) {
+      // throw an exception for '/' expression
+      throw LOG.unableToFindElementWithXPathExpression(expression);
+    }
+
     try {
       return (Boolean) query.evaluate(expression, domElement.unwrap(), XPathConstants.BOOLEAN);
     } catch (XPathExpressionException e) {
