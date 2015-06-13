@@ -13,6 +13,8 @@
 
 package org.camunda.spin.xml.dom;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.camunda.spin.SpinList;
 import org.camunda.spin.impl.test.Script;
 import org.camunda.spin.impl.test.ScriptTest;
@@ -21,10 +23,7 @@ import org.camunda.spin.xml.SpinXPathException;
 import org.camunda.spin.xml.SpinXPathQuery;
 import org.camunda.spin.xml.SpinXmlAttribute;
 import org.camunda.spin.xml.SpinXmlElement;
-import org.camunda.spin.xml.SpinXmlElementException;
 import org.junit.Test;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * @author Sebastian Menski
@@ -35,7 +34,7 @@ public abstract class XmlDomXPathScriptTest extends ScriptTest {
   private static final String xmlWithNamespace = "<root xmlns:bar=\"http://camunda.org\" xmlns:foo=\"http://camunda.com\"><foo:child id=\"child\"><bar:a id=\"a\"/><foo:b id=\"b\"/><a id=\"c\"/></foo:child></root>";
   private static final String xmlWithDefaultNamespace = "<root xmlns=\"http://camunda.com/example\" xmlns:bar=\"http://camunda.org\" xmlns:foo=\"http://camunda.com\"><foo:child id=\"child\"><bar:a id=\"a\"/><foo:b id=\"b\"/><a id=\"c\"/></foo:child></root>";
 
-  @Test(expected = SpinXmlElementException.class)
+  @Test(expected = SpinXPathException.class)
   @Script(
       name = "XmlDomXPathScriptTest.xPath",
       variables = {
@@ -48,7 +47,20 @@ public abstract class XmlDomXPathScriptTest extends ScriptTest {
     query.element();
   }
 
-  @Test(expected = SpinXmlElementException.class)
+  @Test(expected = SpinXPathException.class)
+  @Script(
+      name = "XmlDomXPathScriptTest.xPath",
+      variables = {
+        @ScriptVariable(name = "input", value = xml),
+        @ScriptVariable(name = "expression", value = "/")
+      }
+    )
+  public void canNotQueryDocumentAsElementList() {
+    SpinXPathQuery query = script.getVariable("query");
+    query.elementList();
+  }
+
+  @Test(expected = SpinXPathException.class)
   @Script(
       name = "XmlDomXPathScriptTest.xPath",
       variables = {
@@ -61,7 +73,20 @@ public abstract class XmlDomXPathScriptTest extends ScriptTest {
     query.attribute();
   }
 
-  @Test(expected = SpinXmlElementException.class)
+  @Test(expected = SpinXPathException.class)
+  @Script(
+      name = "XmlDomXPathScriptTest.xPath",
+      variables = {
+        @ScriptVariable(name = "input", value = xml),
+        @ScriptVariable(name = "expression", value = "/")
+      }
+    )
+  public void canNotQueryDocumentAsAttributeList() {
+    SpinXPathQuery query = script.getVariable("query");
+    query.attributeList();
+  }
+
+  @Test(expected = SpinXPathException.class)
   @Script(
       name = "XmlDomXPathScriptTest.xPath",
       variables = {
@@ -74,7 +99,7 @@ public abstract class XmlDomXPathScriptTest extends ScriptTest {
     query.string();
   }
 
-  @Test(expected = SpinXmlElementException.class)
+  @Test(expected = SpinXPathException.class)
   @Script(
       name = "XmlDomXPathScriptTest.xPath",
       variables = {
@@ -87,7 +112,7 @@ public abstract class XmlDomXPathScriptTest extends ScriptTest {
     query.number();
   }
 
-  @Test(expected = SpinXmlElementException.class)
+  @Test(expected = SpinXPathException.class)
   @Script(
       name = "XmlDomXPathScriptTest.xPath",
       variables = {
@@ -115,7 +140,7 @@ public abstract class XmlDomXPathScriptTest extends ScriptTest {
     assertThat(child.attr("id").value()).isEqualTo("child");
   }
 
-  @Test(expected = SpinXmlElementException.class)
+  @Test(expected = SpinXPathException.class)
   @Script(
       name = "XmlDomXPathScriptTest.xPath",
       variables = {
@@ -155,7 +180,7 @@ public abstract class XmlDomXPathScriptTest extends ScriptTest {
     assertThat(childs).hasSize(2);
   }
 
-  @Test(expected = SpinXmlElementException.class)
+  @Test(expected = SpinXPathException.class)
   @Script(
       name = "XmlDomXPathScriptTest.xPath",
       variables = {
@@ -182,7 +207,7 @@ public abstract class XmlDomXPathScriptTest extends ScriptTest {
     assertThat(attribute.value()).isEqualTo("child");
   }
 
-  @Test(expected = SpinXmlElementException.class)
+  @Test(expected = SpinXPathException.class)
   @Script(
       name = "XmlDomXPathScriptTest.xPath",
       variables = {
@@ -222,7 +247,7 @@ public abstract class XmlDomXPathScriptTest extends ScriptTest {
     assertThat(attributes).hasSize(2);
   }
 
-  @Test(expected = SpinXmlElementException.class)
+  @Test(expected = SpinXPathException.class)
   @Script(
       name = "XmlDomXPathScriptTest.xPath",
       variables = {
