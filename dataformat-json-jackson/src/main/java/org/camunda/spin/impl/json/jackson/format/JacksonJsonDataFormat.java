@@ -21,7 +21,6 @@ import java.util.Map;
 import org.camunda.spin.DataFormats;
 import org.camunda.spin.impl.json.jackson.JacksonJsonLogger;
 import org.camunda.spin.impl.json.jackson.JacksonJsonNode;
-import org.camunda.spin.impl.json.jackson.query.JsonPathJacksonProvider;
 import org.camunda.spin.json.SpinJsonDataFormatException;
 import org.camunda.spin.json.SpinJsonNode;
 import org.camunda.spin.spi.DataFormat;
@@ -35,7 +34,10 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.jayway.jsonpath.Configuration;
 import com.jayway.jsonpath.Configuration.ConfigurationBuilder;
-import com.jayway.jsonpath.spi.JsonProvider;
+import com.jayway.jsonpath.spi.json.JacksonJsonProvider;
+import com.jayway.jsonpath.spi.json.JsonProvider;
+import com.jayway.jsonpath.spi.mapper.JacksonMappingProvider;
+
 
 /**
  * Spin data format that can wrap Json content and uses
@@ -72,11 +74,11 @@ public class JacksonJsonDataFormat implements DataFormat<SpinJsonNode> {
   }
 
   public JacksonJsonDataFormat(String name, ObjectMapper objectMapper) {
-
     this(name, objectMapper,
-        new ConfigurationBuilder()
-          .jsonProvider(new JsonPathJacksonProvider(objectMapper))
-          .build());
+      new ConfigurationBuilder()
+        .jsonProvider(new JacksonJsonProvider(objectMapper))
+        .mappingProvider(new JacksonMappingProvider(objectMapper))
+        .build());
   }
 
   public JacksonJsonDataFormat(String name, ObjectMapper objectMapper, Configuration jsonPathConfiguration) {
