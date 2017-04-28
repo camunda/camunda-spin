@@ -17,6 +17,7 @@ import static org.assertj.core.api.Assertions.fail;
 import static org.camunda.spin.Spin.JSON;
 import static org.camunda.spin.json.JsonTestConstants.EXAMPLE_JSON;
 
+import com.jayway.jsonpath.InvalidPathException;
 import org.camunda.spin.SpinList;
 import org.camunda.spin.json.SpinJsonDataFormatException;
 import org.camunda.spin.json.SpinJsonNode;
@@ -265,7 +266,7 @@ public class JsonTreeJsonPathTest {
     }
   }
 
-  @Test(expected = SpinJsonPathException.class)
+  @Test(expected = InvalidPathException.class)
   public void failOnNonExistingJsonPath() {
     SpinJsonNode json = JSON("{\"a\": {\"id\": \"a\"}, \"b\": {\"id\": \"b\"}}");
     json.jsonPath("$.c?(@.id)").element();
