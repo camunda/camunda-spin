@@ -266,7 +266,7 @@ public class JsonTreeJsonPathTest {
     }
   }
 
-  @Test(expected = InvalidPathException.class)
+  @Test(expected = SpinJsonPathException.class)
   public void failOnNonExistingJsonPath() {
     SpinJsonNode json = JSON("{\"a\": {\"id\": \"a\"}, \"b\": {\"id\": \"b\"}}");
     json.jsonPath("$.c?(@.id)").element();
