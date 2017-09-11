@@ -43,23 +43,24 @@ public class JacksonJsonPathQuery implements SpinJsonPathQuery {
   }
 
   public SpinJsonNode element() {
-    try {
-      Object result = query.read(spinJsonNode.toString(), dataFormat.getJsonPathConfiguration());
-      if (result != null) {
-        JsonNode node = dataFormat.createJsonNode(result);
-        return dataFormat.createWrapperInstance(node);
-      }
-      else {
-        throw LOG.unableToFindJsonPath(query.getPath(), spinJsonNode.toString());
-      }
-    } catch(PathNotFoundException pex) {
-      throw LOG.unableToEvaluateJsonPathExpressionOnNode(spinJsonNode, pex);
-    } catch (ClassCastException cex) {
-      throw LOG.unableToCastJsonPathResultTo(SpinJsonNode.class, cex);
-    } catch(InvalidPathException iex) {
-      throw LOG.invalidJsonPath(SpinJsonNode.class, iex);
-    }
-  }
+	    try {
+	      Object result = query.read(spinJsonNode.toString(), dataFormat.getJsonPathConfiguration());
+	      JsonNode node = null;
+	      if (result != null) {
+	        node = dataFormat.createJsonNode(result);
+	      }
+	      else {
+	    	  node = dataFormat.createNullJsonNode();
+	      }
+	      return dataFormat.createWrapperInstance(node);
+	    } catch(PathNotFoundException pex) {
+	      throw LOG.unableToEvaluateJsonPathExpressionOnNode(spinJsonNode, pex);
+	    } catch (ClassCastException cex) {
+	      throw LOG.unableToCastJsonPathResultTo(SpinJsonNode.class, cex);
+	    } catch(InvalidPathException iex) {
+	      throw LOG.invalidJsonPath(SpinJsonNode.class, iex);
+	    }
+	  }
 
   public SpinList<SpinJsonNode> elementList() {
     JacksonJsonNode node = (JacksonJsonNode) element();

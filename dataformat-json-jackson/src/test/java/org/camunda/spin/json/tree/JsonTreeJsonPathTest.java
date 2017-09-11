@@ -74,6 +74,12 @@ public class JsonTreeJsonPathTest {
 
     assertThat(order.longValue()).isEqualTo(1234567890987654321L);
   }
+  
+  @Test
+  public void shouldGetNullNode() {
+	  SpinJsonNode node = jsonNode.jsonPath("$.nullValue").element();
+	  assertThat(node.isNull()).isTrue();
+  }
 
   @Test
   public void shouldGetSingleArrayEntry() {
