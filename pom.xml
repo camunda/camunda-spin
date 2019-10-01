@@ -23,8 +23,8 @@
   </modules>
 
   <properties>
-    <jackson.version>2.9.9</jackson.version>
-    <jackson.version.databind>2.9.9.3</jackson.version.databind>
+    <jackson.version>2.10.0</jackson.version>
+    <jackson.version.databind>${jackson.version}</jackson.version.databind>
     <spin.version.old>1.6.9</spin.version.old>
     <groovy.version>2.4.13</groovy.version>
     <license.includeTransitiveDependencies>false</license.includeTransitiveDependencies>
@@ -124,6 +124,7 @@
         <plugin>
           <groupId>org.apache.felix</groupId>
           <artifactId>maven-bundle-plugin</artifactId>
+          <version>3.5.0</version>
           <configuration>
             <instructions>
               <Export-Package>org.camunda.spin*</Export-Package>
