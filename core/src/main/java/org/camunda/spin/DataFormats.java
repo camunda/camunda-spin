@@ -101,10 +101,6 @@ public class DataFormats {
     return new HashSet<>(availableDataFormats.values());
   }
 
-  protected Map<String, DataFormat<?>> getAvailableDataFormatsMap() {
-    return availableDataFormats;
-  }
-
   public DataFormat<? extends Spin<?>> getDataFormatByName(String name) {
     ensureDataformatsInitialized();
     return availableDataFormats.get(name);
