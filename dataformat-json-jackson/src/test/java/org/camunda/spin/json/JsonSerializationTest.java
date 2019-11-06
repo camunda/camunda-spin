@@ -141,7 +141,7 @@ public class JsonSerializationTest {
     final byte[] bytes = new String("{\"foo\": \"bar\"}").getBytes();
     assertThat(bytes).isNotEmpty();
 
-    final Object o = deserializeFromByteArray(bytes, "java.util.HashMap");
+    final Object o = deserializeFromByteArray(bytes, "java.util.HashMap<java.lang.String, java.lang.String>");
     assertThat(o).isInstanceOf(HashMap.class);
     assertTrue(((HashMap)o).containsKey("foo"));
     assertEquals("bar", ((HashMap)o).get("foo"));
@@ -177,12 +177,16 @@ public class JsonSerializationTest {
 
     try {
       Object mappedObject = reader.readInput(bufferedReader);
-      return mapper.mapInternalToJava(mappedObject, objectTypeName);
+      return doDeserialization(mapper, mappedObject, objectTypeName);
     } finally {
       bais.close();
       inReader.close();
       bufferedReader.close();
     }
+  }
+
+  protected Object doDeserialization(DataFormatMapper mapper, Object mappedObject, String objectTypeName) {
+    return mapper.mapInternalToJava(mappedObject, objectTypeName);
   }
 
 }
