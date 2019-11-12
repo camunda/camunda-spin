@@ -122,7 +122,7 @@ public class JacksonJsonDataFormatMapper implements DataFormatMapper {
       if (type.isMapLikeType()) {
         validateType(type.getKeyType(), validator, invalidTypes);
       }
-      if (type.isContainerType() || type.hasContentType()) {
+      if (type.isContainerType() || type.getContentType() != null) {
         validateType(type.getContentType(), validator, invalidTypes);
       }
     }
