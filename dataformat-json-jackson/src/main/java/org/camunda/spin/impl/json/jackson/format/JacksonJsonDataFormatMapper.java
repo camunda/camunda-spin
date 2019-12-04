@@ -23,6 +23,7 @@ import java.util.List;
 import org.camunda.spin.DeserializationTypeValidator;
 import org.camunda.spin.SpinRuntimeException;
 import org.camunda.spin.impl.json.jackson.JacksonJsonLogger;
+import org.camunda.spin.json.SpinJsonDataFormatException;
 import org.camunda.spin.spi.DataFormatMapper;
 
 import com.fasterxml.jackson.databind.JavaType;
@@ -66,7 +67,7 @@ public class JacksonJsonDataFormatMapper implements DataFormatMapper {
   @Override
   public <T> T mapInternalToJava(Object parameter, Class<T> type, DeserializationTypeValidator validator) {
     JavaType javaType = TypeFactory.defaultInstance().constructType(type);
-    return mapInternalToJava(parameter, javaType, validator);
+    return mapInternalToJava(parameter, javaType);
   }
 
   public <T> T mapInternalToJava(Object parameter, String typeIdentifier) {
@@ -78,10 +79,10 @@ public class JacksonJsonDataFormatMapper implements DataFormatMapper {
     try {
       //sometimes the class identifier is at once a fully qualified class name
       final Class<?> aClass = Class.forName(typeIdentifier, true, Thread.currentThread().getContextClassLoader());
-      return (T) mapInternalToJava(parameter, aClass, validator);
+      return (T) mapInternalToJava(parameter, aClass);
     } catch (ClassNotFoundException e) {
       JavaType javaType = format.constructJavaTypeFromCanonicalString(typeIdentifier);
-      T result = mapInternalToJava(parameter, javaType, validator);
+      T result = mapInternalToJava(parameter, javaType);
       return result;
     }
   }
@@ -93,11 +94,31 @@ public class JacksonJsonDataFormatMapper implements DataFormatMapper {
   public <C> C mapInternalToJava(Object parameter, JavaType type, DeserializationTypeValidator validator) {
     JsonNode jsonNode = (JsonNode) parameter;
     try {
-      validateType(type, validator);
       ObjectMapper mapper = format.getObjectMapper();
       return mapper.readValue(mapper.treeAsTokens(jsonNode), type);
     } catch (IOException | SpinRuntimeException e) {
       throw LOG.unableToDeserialize(jsonNode, type, e);
+    }
+  }
+
+  @Override
+  public void validateTargetType(String typeIdentifier, DeserializationTypeValidator validator) {
+    if (validator != null && typeIdentifier != null) {
+      JavaType javaType = null;
+      try {
+        //sometimes the class identifier is at once a fully qualified class name
+        Class<?> aClass = Class.forName(typeIdentifier, true, Thread.currentThread().getContextClassLoader());
+        javaType = TypeFactory.defaultInstance().constructType(aClass);
+      } catch (ClassNotFoundException e) {
+        try {
+          javaType = format.constructJavaTypeFromCanonicalString(typeIdentifier);
+        } catch (SpinJsonDataFormatException ex) {
+          // type not found
+        }
+      }
+      if (javaType != null) {
+        validateType(javaType, validator);
+      }
     }
   }
 
@@ -107,12 +128,10 @@ public class JacksonJsonDataFormatMapper implements DataFormatMapper {
    * the {@code AbstractVariablesResource#validateType} in the REST API
    */
   protected void validateType(JavaType type, DeserializationTypeValidator validator) {
-    if (validator != null) {
-      List<String> invalidTypes = new ArrayList<>();
-      validateType(type, validator, invalidTypes);
-      if (!invalidTypes.isEmpty()) {
-        throw new SpinRuntimeException("The following classes are not whitelisted for deserialization: " + invalidTypes);
-      }
+    List<String> invalidTypes = new ArrayList<>();
+    validateType(type, validator, invalidTypes);
+    if (!invalidTypes.isEmpty()) {
+      throw new SpinRuntimeException("The following classes are not whitelisted for deserialization: " + invalidTypes);
     }
   }
 

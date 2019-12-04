@@ -34,6 +34,7 @@ import org.camunda.spin.impl.util.SpinReflectUtil;
 import org.camunda.spin.impl.xml.dom.DomXmlLogger;
 import org.camunda.spin.impl.xml.dom.format.spi.JaxBContextProvider;
 import org.camunda.spin.spi.DataFormatMapper;
+import org.camunda.spin.spi.SpinDataFormatException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
@@ -115,29 +116,12 @@ public class DomXmlDataFormatMapper implements DataFormatMapper {
 
     Node xmlNode = (Node) parameter;
     try {
-      validateType(javaClass, validator);
       Unmarshaller unmarshaller = getUnmarshaller(javaClass);
       JAXBElement<T> root = unmarshaller.unmarshal(new DOMSource(xmlNode), javaClass);
       return root.getValue();
 
     } catch (JAXBException e) {
       throw LOG.unableToDeserialize(parameter, javaClass.getCanonicalName(), e);
-    }
-  }
-
-  protected void validateType(Class<?> type, DeserializationTypeValidator validator) {
-    if (validator != null) {
-      // validate the outer class
-      if (!type.isPrimitive()) {
-        Class<?> typeToValidate = type;
-        if (type.isArray()) {
-          typeToValidate = type.getComponentType();
-        }
-        String className = typeToValidate.getName();
-        if (!validator.validate(className)) {
-          throw new SpinRuntimeException("The class '" + className + "' is not whitelisted for deserialization.");
-        }
-      }
     }
   }
 
@@ -154,7 +138,7 @@ public class DomXmlDataFormatMapper implements DataFormatMapper {
 
     try {
       Class<?> javaClass = SpinReflectUtil.loadClass(classIdentifier, dataFormat);
-      return (T) mapInternalToJava(parameter, javaClass, validator);
+      return (T) mapInternalToJava(parameter, javaClass);
     }
     catch (Exception e) {
       throw LOG.unableToDeserialize(parameter, classIdentifier, e);
@@ -169,5 +153,31 @@ public class DomXmlDataFormatMapper implements DataFormatMapper {
   protected Unmarshaller getUnmarshaller(Class<?> parameter) throws JAXBException {
     JaxBContextProvider jaxBContextProvider = dataFormat.getJaxBContextProvider();
     return jaxBContextProvider.createUnmarshaller(parameter);
+  }
+
+  @Override
+  public void validateTargetType(String typeIdentifier, DeserializationTypeValidator validator) {
+    if (validator != null && typeIdentifier != null) {
+      try {
+        Class<?> javaClass = SpinReflectUtil.loadClass(typeIdentifier, dataFormat);
+        validateType(javaClass, validator);
+      } catch (SpinDataFormatException e) {
+        // class not found and not validated
+      }
+    }
+  }
+
+  protected void validateType(Class<?> type, DeserializationTypeValidator validator) {
+    // validate the outer class
+    if (!type.isPrimitive()) {
+      Class<?> typeToValidate = type;
+      if (type.isArray()) {
+        typeToValidate = type.getComponentType();
+      }
+      String className = typeToValidate.getName();
+      if (!validator.validate(className)) {
+        throw new SpinRuntimeException("The class '" + className + "' is not whitelisted for deserialization.");
+      }
+    }
   }
 }

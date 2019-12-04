@@ -33,7 +33,7 @@ public class JsonSerializationWithValidationTest extends JsonSerializationTest {
 
   @Override
   protected Object doDeserialization(DataFormatMapper mapper, Object mappedObject, String objectTypeName) {
-    return mapper.mapInternalToJava(mappedObject, objectTypeName, validator);
+    return mapper.mapInternalToJava(mappedObject, objectTypeName);
   }
 
 }
