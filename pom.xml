@@ -178,7 +178,7 @@
     <url>https://github.com/camunda/camunda-spin</url>
     <connection>scm:git:git@github.com:camunda/camunda-spin.git</connection>
     <developerConnection>scm:git:git@github.com:camunda/camunda-spin.git</developerConnection>
-    <tag>1.7.4</tag>
+    <tag>HEAD</tag>
   </scm>
 
 </project>
