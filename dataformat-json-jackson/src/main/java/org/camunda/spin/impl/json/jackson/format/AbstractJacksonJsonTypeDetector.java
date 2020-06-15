@@ -16,12 +16,20 @@
  */
 package org.camunda.spin.impl.json.jackson.format;
 
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.type.TypeFactory;
 import org.camunda.spin.spi.DataFormat;
 import org.camunda.spin.spi.TypeDetector;
 
+import java.lang.reflect.TypeVariable;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 public abstract class AbstractJacksonJsonTypeDetector implements TypeDetector {
 
-  public boolean appliesTo(DataFormat<?> dataFormat) {
-    return dataFormat instanceof JacksonJsonDataFormat;
-  }
+    public boolean appliesTo(DataFormat<?> dataFormat) {
+        return dataFormat instanceof JacksonJsonDataFormat;
+    }
 }
