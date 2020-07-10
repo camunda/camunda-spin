@@ -16,12 +16,36 @@
  */
 package org.camunda.spin.impl.json.jackson.format;
 
-import org.camunda.spin.spi.DataFormat;
 import org.camunda.spin.spi.TypeDetector;
 
-public abstract class AbstractJacksonJsonTypeDetector implements TypeDetector {
+import java.util.Map;
 
-  public boolean appliesTo(DataFormat<?> dataFormat) {
-    return dataFormat instanceof JacksonJsonDataFormat;
-  }
+import static org.camunda.spin.impl.json.jackson.format.TypeHelper.constructType;
+
+/**
+ * Detects erased types of Map classes.
+ * <p>To use it, make sure to call {@link JacksonJsonDataFormat#addTypeDetector(TypeDetector)} to activate it.</p>
+ */
+public class MapJacksonJsonTypeDetector extends AbstractJacksonJsonTypeDetector {
+    /**
+     * Object instance to use.
+     */
+    public static MapJacksonJsonTypeDetector INSTANCE = new MapJacksonJsonTypeDetector();
+
+    /**
+     * The client is not intended to instantiate this class.
+     * Please use {@link MapJacksonJsonTypeDetector#INSTANCE}.
+     */
+    private MapJacksonJsonTypeDetector() {
+    }
+
+    @Override
+    public boolean canHandle(Object value) {
+        return value instanceof Map<?, ?>;
+    }
+
+    @Override
+    public String detectType(Object value) {
+        return constructType(value).toCanonical();
+    }
 }

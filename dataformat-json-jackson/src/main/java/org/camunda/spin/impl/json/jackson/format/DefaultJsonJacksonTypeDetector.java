@@ -20,16 +20,6 @@ import com.fasterxml.jackson.databind.type.TypeFactory;
 
 public class DefaultJsonJacksonTypeDetector extends AbstractJacksonJsonTypeDetector {
 
-  public static DefaultJsonJacksonTypeDetector INSTANCE = new DefaultJsonJacksonTypeDetector();
-
-  /**
-   * The client is not intended to instantiate this class.
-   * Please use {@link DefaultJsonJacksonTypeDetector#INSTANCE}.
-   */
-  private DefaultJsonJacksonTypeDetector() {
-
-  }
-
   public boolean canHandle(Object object) {
     return true;
   }

@@ -116,8 +116,8 @@ public class JacksonJsonDataFormat implements DataFormat<SpinJsonNode> {
 
   protected void initTypeDetectors() {
     typeDetectors = new ArrayList<>();
-    typeDetectors.add(ErasedCollectionTypeDetector.INSTANCE);
-    typeDetectors.add(DefaultJsonJacksonTypeDetector.INSTANCE);
+    typeDetectors.add(new ListJacksonJsonTypeDetector());
+    typeDetectors.add(new DefaultJsonJacksonTypeDetector());
   }
 
   // interface implementation ///////////////////////////////////
@@ -188,7 +188,7 @@ public class JacksonJsonDataFormat implements DataFormat<SpinJsonNode> {
 
   /**
    * Returns a {@link Configuration} object for jayway json path
-   * which uses this dataformat's object mapper as {@link com.jayway.jsonpath.spi.json.JsonProvider}.
+   * which uses this dataformat's object mapper as {@link JsonProvider}.
    *
    * @return the {@link Configuration} for jsonpath
    */

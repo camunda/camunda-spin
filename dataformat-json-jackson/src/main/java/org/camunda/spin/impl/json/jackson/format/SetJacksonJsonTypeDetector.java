@@ -16,12 +16,36 @@
  */
 package org.camunda.spin.impl.json.jackson.format;
 
-import org.camunda.spin.spi.DataFormat;
 import org.camunda.spin.spi.TypeDetector;
 
-public abstract class AbstractJacksonJsonTypeDetector implements TypeDetector {
+import java.util.Set;
 
-  public boolean appliesTo(DataFormat<?> dataFormat) {
-    return dataFormat instanceof JacksonJsonDataFormat;
-  }
+import static org.camunda.spin.impl.json.jackson.format.TypeHelper.constructType;
+
+/**
+ * Detects erased types of Set classes.
+ * <p>To use it, make sure to call {@link JacksonJsonDataFormat#addTypeDetector(TypeDetector)} to activate it.</p>
+ */
+public class SetJacksonJsonTypeDetector extends AbstractJacksonJsonTypeDetector {
+    /**
+     * Object instance to use.
+     */
+    public static SetJacksonJsonTypeDetector INSTANCE = new SetJacksonJsonTypeDetector();
+
+    /**
+     * The client is not intended to instantiate this class.
+     * Please use {@link SetJacksonJsonTypeDetector#INSTANCE}.
+     */
+    private SetJacksonJsonTypeDetector() {
+    }
+
+    @Override
+    public boolean canHandle(Object value) {
+        return value instanceof Set<?>;
+    }
+
+    @Override
+    public String detectType(Object value) {
+        return constructType(value).toCanonical();
+    }
 }
