@@ -16,14 +16,14 @@
  */
 package org.camunda.spin.javascript.json.tree;
 
-import org.camunda.spin.impl.test.ScriptEngine;
 import org.camunda.spin.json.tree.JsonTreeCreateScriptTest;
+import org.camunda.spin.test.ScriptEngine;
 
 /**
  * @author Thorben Lindhauer
  *
  */
-@ScriptEngine("javascript")
+@ScriptEngine("graal.js")
 public class JsonTreeCreateJavascriptTest extends JsonTreeCreateScriptTest {
 
 }

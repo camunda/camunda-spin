@@ -16,12 +16,12 @@
  */
 package org.camunda.spin.javascript.xml.dom;
 
-import org.camunda.spin.impl.test.ScriptEngine;
+import org.camunda.spin.test.ScriptEngine;
 import org.camunda.spin.xml.dom.XmlDomMapJavaToXmlScriptTest;
 
 /**
  * @author Stefan Hentschel.
  */
-@ScriptEngine("javascript")
+@ScriptEngine("graal.js")
 public class XmlDomMapJavaToXmlJavascriptTest extends XmlDomMapJavaToXmlScriptTest {
 }

@@ -16,8 +16,6 @@
  */
 package org.camunda.spin.test;
 
-import org.camunda.spin.impl.test.Script;
-import org.camunda.spin.impl.test.ScriptTest;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

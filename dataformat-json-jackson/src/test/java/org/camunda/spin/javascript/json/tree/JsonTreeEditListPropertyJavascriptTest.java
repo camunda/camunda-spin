@@ -16,8 +16,8 @@
  */
 package org.camunda.spin.javascript.json.tree;
 
-import org.camunda.spin.impl.test.ScriptEngine;
 import org.camunda.spin.json.tree.JsonTreeEditListPropertyScriptTest;
+import org.camunda.spin.test.ScriptEngine;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -25,7 +25,7 @@ import org.junit.Test;
  * @author Stefan Hentschel
  *
  */
-@ScriptEngine("javascript")
+@ScriptEngine("graal.js")
 public class JsonTreeEditListPropertyJavascriptTest extends JsonTreeEditListPropertyScriptTest {
 
   /**

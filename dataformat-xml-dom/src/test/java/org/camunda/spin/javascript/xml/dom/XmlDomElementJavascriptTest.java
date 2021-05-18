@@ -16,18 +16,18 @@
  */
 package org.camunda.spin.javascript.xml.dom;
 
-import org.camunda.spin.impl.test.Script;
-import org.camunda.spin.impl.test.ScriptEngine;
-import org.camunda.spin.impl.test.ScriptVariable;
+import static org.camunda.spin.xml.XmlTestConstants.EXAMPLE_XML_FILE_NAME;
+
+import org.camunda.spin.test.Script;
+import org.camunda.spin.test.ScriptEngine;
+import org.camunda.spin.test.ScriptVariable;
 import org.camunda.spin.xml.dom.XmlDomElementScriptTest;
 import org.junit.Test;
-
-import static org.camunda.spin.xml.XmlTestConstants.EXAMPLE_XML_FILE_NAME;
 
 /**
  * @author Sebastian Menski
  */
-@ScriptEngine("javascript")
+@ScriptEngine("graal.js")
 public class XmlDomElementJavascriptTest extends XmlDomElementScriptTest {
 
   /**
