@@ -17,6 +17,7 @@
 package org.camunda.spin.test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -121,9 +122,17 @@ public class ScriptEngineRule implements TestRule {
                  (v) -> v.hasArrayElements(),
                  (v) -> transformArrayToIterable(v))
              .targetTypeMapping(
+                 Value.class, List.class,
+                 null,
+                 (v) -> Arrays.asList(v.as(Object.class)))
+             .targetTypeMapping(
                  Value.class, Collection.class,
                  (v) -> v.hasArrayElements(),
                  (v) -> transformArrayToIterable(v))
+             .targetTypeMapping(
+                 Value.class, Collection.class,
+                 null,
+                 (v) -> Arrays.asList(v.as(Object.class)))
              .targetTypeMapping(
                  Value.class, Iterable.class,
                  (v) -> v.hasArrayElements(),
