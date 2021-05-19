@@ -67,13 +67,6 @@
       <artifactId>js-scriptengine</artifactId>
       <scope>test</scope>
     </dependency>
-    
-    <dependency>
-      <groupId>org.openjdk.nashorn</groupId>
-      <artifactId>nashorn-core</artifactId>
-      <version>15.2</version>
-      <scope>test</scope>
-    </dependency>
 
     <dependency>
       <groupId>ch.qos.logback</groupId>
