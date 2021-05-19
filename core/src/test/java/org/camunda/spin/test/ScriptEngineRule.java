@@ -17,7 +17,6 @@
 package org.camunda.spin.test;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -111,8 +110,6 @@ public class ScriptEngineRule implements TestRule {
       Context.newBuilder("js")
         // make sure GraalVM JS can provide access the host and can lookup classes
         .allowHostClassLookup(s -> true)
-        .allowExperimentalOptions(true)
-        .option("js.nashorn-compat", "true")
         .allowHostAccess(
            HostAccess
              .newBuilder(HostAccess.ALL)
@@ -122,17 +119,9 @@ public class ScriptEngineRule implements TestRule {
                  (v) -> v.hasArrayElements(),
                  (v) -> transformArrayToIterable(v))
              .targetTypeMapping(
-                 Value.class, List.class,
-                 null,
-                 (v) -> Arrays.asList(v.as(Object.class)))
-             .targetTypeMapping(
                  Value.class, Collection.class,
                  (v) -> v.hasArrayElements(),
                  (v) -> transformArrayToIterable(v))
-             .targetTypeMapping(
-                 Value.class, Collection.class,
-                 null,
-                 (v) -> Arrays.asList(v.as(Object.class)))
              .targetTypeMapping(
                  Value.class, Iterable.class,
                  (v) -> v.hasArrayElements(),

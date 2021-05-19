@@ -23,6 +23,7 @@ import static org.camunda.spin.impl.xml.dom.util.DomXmlEnsure.ensureChildElement
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -236,6 +237,10 @@ public class DomXmlElement extends SpinXmlElement {
     return this;
   }
 
+  public SpinXmlElement append(SpinXmlElement childElement) {
+    return append(Arrays.asList(childElement));
+  }
+
   public SpinXmlElement append(Collection<SpinXmlElement> childElements) {
     ensureNotNull("childElements", childElements);
     return append(childElements.toArray(new SpinXmlElement[0]));
@@ -300,6 +305,10 @@ public class DomXmlElement extends SpinXmlElement {
       }
     }
     return this;
+  }
+
+  public SpinXmlElement remove(SpinXmlElement childElement) {
+    return remove(Arrays.asList(childElement));
   }
 
   public SpinXmlElement remove(Collection<SpinXmlElement> childElements) {
