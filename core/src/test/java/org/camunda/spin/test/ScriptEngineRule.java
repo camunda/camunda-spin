@@ -122,28 +122,8 @@ public class ScriptEngineRule implements TestRule {
                  Value.class, Collection.class,
                  (v) -> v.hasArrayElements(),
                  (v) -> transformArrayToIterable(v))
-             .targetTypeMapping(
-                 Value.class, Iterable.class,
-                 (v) -> v.hasArrayElements(),
-                 (v) -> transformArrayToIterable(v))
              .build())
         );
-  }
-
-  @SuppressWarnings({ "rawtypes", "unchecked" })
-  protected Map transformMembers(Value v) {
-    Map map = new HashMap<>();
-    for (String key : v.getMemberKeys()) {
-      Value member = v.getMember(key);
-      if (member.hasArrayElements() && !member.isHostObject()) {
-        map.put(key, transformArrayToIterable(member));
-      } else if (member.hasMembers() && !member.isHostObject()) {
-        map.put(key, transformMembers(member));
-      } else {
-        map.put(key, valueToObject(member));
-      }
-    }
-    return map;
   }
 
   @SuppressWarnings({ "rawtypes", "unchecked" })
@@ -156,8 +136,6 @@ public class ScriptEngineRule implements TestRule {
       Value element = v.getArrayElement(i);
       if (element.hasArrayElements() && !element.isHostObject()) {
         list.add(transformArrayToIterable(element));
-      } else if (element.hasMembers() && !element.isHostObject()) {
-        list.add(transformMembers(element));
       } else {
         list.add(valueToObject(element));
       }

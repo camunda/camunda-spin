@@ -135,6 +135,27 @@
         </plugins>
       </build>
     </profile>
+    
+    <profile>
+      <id>jdk-15-and-onwards</id>
+      <activation>
+        <jdk>[15,)</jdk>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <configuration>
+              <excludes combine.children="append">
+                <exclude>**/nashorn/**</exclude>
+              </excludes>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    
     <!-- check for api differences between latest minor release -->
     <profile>
       <id>check-api-compatibility</id>
