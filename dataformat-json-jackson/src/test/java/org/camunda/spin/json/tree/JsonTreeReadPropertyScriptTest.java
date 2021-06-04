@@ -16,18 +16,18 @@
  */
 package org.camunda.spin.json.tree;
 
-import org.camunda.spin.Spin;
-import org.camunda.spin.impl.test.Script;
-import org.camunda.spin.impl.test.ScriptTest;
-import org.camunda.spin.impl.test.ScriptVariable;
-import org.camunda.spin.json.SpinJsonDataFormatException;
-import org.camunda.spin.json.SpinJsonNode;
-import org.camunda.spin.json.SpinJsonPropertyException;
-import org.junit.Test;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.camunda.spin.json.JsonTestConstants.EXAMPLE_JSON;
 import static org.camunda.spin.json.JsonTestConstants.EXAMPLE_JSON_FILE_NAME;
+
+import org.camunda.spin.Spin;
+import org.camunda.spin.json.SpinJsonDataFormatException;
+import org.camunda.spin.json.SpinJsonNode;
+import org.camunda.spin.json.SpinJsonPropertyException;
+import org.camunda.spin.test.Script;
+import org.camunda.spin.test.ScriptTest;
+import org.camunda.spin.test.ScriptVariable;
+import org.junit.Test;
 
 /**
  * @author Thorben Lindhauer

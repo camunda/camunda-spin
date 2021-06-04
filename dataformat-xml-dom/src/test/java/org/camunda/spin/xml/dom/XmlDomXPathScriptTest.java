@@ -19,9 +19,9 @@ package org.camunda.spin.xml.dom;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.camunda.spin.SpinList;
-import org.camunda.spin.impl.test.Script;
-import org.camunda.spin.impl.test.ScriptTest;
-import org.camunda.spin.impl.test.ScriptVariable;
+import org.camunda.spin.test.Script;
+import org.camunda.spin.test.ScriptTest;
+import org.camunda.spin.test.ScriptVariable;
 import org.camunda.spin.xml.SpinXPathException;
 import org.camunda.spin.xml.SpinXPathQuery;
 import org.camunda.spin.xml.SpinXmlAttribute;

@@ -23,11 +23,11 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.camunda.spin.impl.test.Script;
-import org.camunda.spin.impl.test.ScriptTest;
-import org.camunda.spin.impl.test.ScriptVariable;
 import org.camunda.spin.json.SpinJsonNode;
 import org.camunda.spin.json.SpinJsonPropertyException;
+import org.camunda.spin.test.Script;
+import org.camunda.spin.test.ScriptTest;
+import org.camunda.spin.test.ScriptVariable;
 import org.junit.Test;
 
 /**

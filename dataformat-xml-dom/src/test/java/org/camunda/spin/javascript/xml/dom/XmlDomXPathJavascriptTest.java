@@ -16,12 +16,12 @@
  */
 package org.camunda.spin.javascript.xml.dom;
 
-import org.camunda.spin.impl.test.ScriptEngine;
+import org.camunda.spin.test.ScriptEngine;
 import org.camunda.spin.xml.dom.XmlDomXPathScriptTest;
 
 /**
  * @author Sebastian Menski
  */
-@ScriptEngine("javascript")
+@ScriptEngine("graal.js")
 public class XmlDomXPathJavascriptTest extends XmlDomXPathScriptTest {
 }
