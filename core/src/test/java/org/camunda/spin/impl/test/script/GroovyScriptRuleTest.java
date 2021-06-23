@@ -14,11 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.test.script;
+package org.camunda.spin.impl.test.script;
 
-import org.camunda.spin.test.ScriptEngine;
-import org.camunda.spin.test.ScriptRuleTest;
+import org.camunda.spin.impl.test.ScriptEngine;
+import org.camunda.spin.impl.test.ScriptRuleTest;
 
-@ScriptEngine("nashorn")
-public class JavascriptScriptRuleNashornTest extends ScriptRuleTest {
+/**
+ * @author Sebastian Menski
+ */
+@ScriptEngine("groovy")
+public class GroovyScriptRuleTest extends ScriptRuleTest {
 }

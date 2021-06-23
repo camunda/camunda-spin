@@ -20,8 +20,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.camunda.spin.xml.XmlTestConstants.EXAMPLE_VALIDATION_XML;
 import static org.camunda.spin.xml.XmlTestConstants.createExampleOrder;
 
-import org.camunda.spin.test.Script;
-import org.camunda.spin.test.ScriptTest;
+import org.camunda.spin.impl.test.Script;
+import org.camunda.spin.impl.test.ScriptTest;
 import org.camunda.spin.xml.mapping.Order;
 import org.junit.Test;
 

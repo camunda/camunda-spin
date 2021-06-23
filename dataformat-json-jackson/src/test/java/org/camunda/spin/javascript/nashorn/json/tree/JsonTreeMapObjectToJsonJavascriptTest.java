@@ -16,8 +16,8 @@
  */
 package org.camunda.spin.javascript.nashorn.json.tree;
 
+import org.camunda.spin.impl.test.ScriptEngine;
 import org.camunda.spin.json.tree.JsonTreeMapObjectToJsonScriptTest;
-import org.camunda.spin.test.ScriptEngine;
 import org.junit.Ignore;
 
 /**

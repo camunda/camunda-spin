@@ -16,8 +16,8 @@
  */
 package org.camunda.spin.javascript.json.tree;
 
+import org.camunda.spin.impl.test.ScriptEngine;
 import org.camunda.spin.json.tree.JsonTreeMapObjectToJsonScriptTest;
-import org.camunda.spin.test.ScriptEngine;
 import org.junit.Ignore;
 
 /**
@@ -27,7 +27,7 @@ import org.junit.Ignore;
  * @author Thorben Lindhauer
  */
 @Ignore
-@ScriptEngine("nashorn")
+@ScriptEngine("graal.js")
 public class JsonTreeMapObjectToJsonJavascriptTest extends JsonTreeMapObjectToJsonScriptTest {
 
 }

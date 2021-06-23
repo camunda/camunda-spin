@@ -14,44 +14,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.test;
+package org.camunda.spin.impl.test.script;
 
-import java.util.Map;
-
-import org.camunda.spin.SpinScriptException;
-import org.junit.ClassRule;
-import org.junit.Rule;
+import org.camunda.spin.impl.test.ScriptEngine;
+import org.camunda.spin.impl.test.ScriptRuleTest;
 
 /**
- * Base script test which loads an engine and provides the
- * script as field.
- *
  * @author Sebastian Menski
  */
-public abstract class ScriptTest {
-
-  @ClassRule
-  public static ScriptEngineRule scriptEngine = new ScriptEngineRule();
-
-  @Rule
-  public ScriptRule script = new ScriptRule();
-
-  protected void failingWithException() throws Throwable {
-    try {
-      script.execute();
-    }
-    catch (SpinScriptException e) {
-      throw e.getCause().getCause().getCause();
-    }
-  }
-
-  protected void failingWithException(Map<String, Object> variables) throws Throwable {
-    try {
-      script.execute(variables);
-    }
-    catch (SpinScriptException e) {
-      throw e.getCause().getCause().getCause();
-    }
-  }
-
+@ScriptEngine("ruby")
+public class RubyScriptRuleTest extends ScriptRuleTest {
 }

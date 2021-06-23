@@ -18,9 +18,9 @@ package org.camunda.spin.javascript.xml.dom;
 
 import static org.camunda.spin.xml.XmlTestConstants.EXAMPLE_XML_FILE_NAME;
 
-import org.camunda.spin.test.Script;
-import org.camunda.spin.test.ScriptEngine;
-import org.camunda.spin.test.ScriptVariable;
+import org.camunda.spin.impl.test.Script;
+import org.camunda.spin.impl.test.ScriptEngine;
+import org.camunda.spin.impl.test.ScriptVariable;
 import org.camunda.spin.xml.dom.XmlDomElementScriptTest;
 import org.junit.Test;
 
@@ -31,7 +31,7 @@ import org.junit.Test;
 public class XmlDomElementJavascriptTest extends XmlDomElementScriptTest {
 
   /**
-   * The Nashorn scripting engine cannot determine the method to call if the
+   * The Graal.js scripting engine cannot determine the method to call if the
    * parameter is null.
    */
 
@@ -49,7 +49,7 @@ public class XmlDomElementJavascriptTest extends XmlDomElementScriptTest {
   }
 
   /**
-   * The Nashorn scripting engine cannot determine the method to call if the
+   * The Graal.js scripting engine cannot determine the method to call if the
    * parameter is null.
    */
   @Test(expected = RuntimeException.class)

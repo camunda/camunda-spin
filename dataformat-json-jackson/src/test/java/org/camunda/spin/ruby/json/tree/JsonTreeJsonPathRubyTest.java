@@ -16,8 +16,8 @@
  */
 package org.camunda.spin.ruby.json.tree;
 
+import org.camunda.spin.impl.test.ScriptEngine;
 import org.camunda.spin.json.tree.JsonTreeJsonPathScriptTest;
-import org.camunda.spin.test.ScriptEngine;
 
 /**
  * @author Thorben Lindhauer

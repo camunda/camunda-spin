@@ -16,8 +16,8 @@
  */
 package org.camunda.spin.javascript.nashorn.json.tree;
 
+import org.camunda.spin.impl.test.ScriptEngine;
 import org.camunda.spin.json.tree.JsonTreeRemovePropertyScriptTest;
-import org.camunda.spin.test.ScriptEngine;
 
 @ScriptEngine("nashorn")
 public class JsonTreeRemovePropertyJavascriptTest extends JsonTreeRemovePropertyScriptTest {

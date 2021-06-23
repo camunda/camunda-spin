@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.test;
+package org.camunda.spin.impl.test;
 
 import java.io.File;
 import java.io.Reader;
@@ -37,7 +37,7 @@ import org.junit.runners.model.Statement;
 
 /**
  * A jUnit4 {@link TestRule} to load and execute a script. To
- * execute a {@link org.camunda.spin.test.ScriptEngine} {@link ClassRule}
+ * execute a {@link org.camunda.spin.impl.test.ScriptEngine} {@link ClassRule}
  * is used to obtain a {@link ScriptEngine}.
  *
  * @author Sebastian Menski

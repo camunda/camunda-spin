@@ -26,13 +26,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.camunda.spin.impl.test.Script;
+import org.camunda.spin.impl.test.ScriptTest;
+import org.camunda.spin.impl.test.ScriptVariable;
 import org.camunda.spin.json.SpinJsonDataFormatException;
 import org.camunda.spin.json.SpinJsonException;
 import org.camunda.spin.json.mapping.Order;
 import org.camunda.spin.json.mapping.RegularCustomer;
-import org.camunda.spin.test.Script;
-import org.camunda.spin.test.ScriptTest;
-import org.camunda.spin.test.ScriptVariable;
 import org.junit.Test;
 
 public abstract class JsonTreeMapJsonToJavaScriptTest extends ScriptTest {

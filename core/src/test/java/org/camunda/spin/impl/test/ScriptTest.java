@@ -14,30 +14,44 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.test;
+package org.camunda.spin.impl.test;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import java.util.Map;
+
+import org.camunda.spin.SpinScriptException;
+import org.junit.ClassRule;
+import org.junit.Rule;
 
 /**
- * Annotation to define a {@link ScriptEngine} of a test class
- * using the {@link ScriptEngineRule}.
- *
- * <pre>
- *   {@literal @}ScriptEngine("python")
- *   public class SpinXmlPythonTest extends SpinXmlScriptTest {
- *     // ...
- *   }
- * </pre>
+ * Base script test which loads an engine and provides the
+ * script as field.
  *
  * @author Sebastian Menski
  */
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
-public @interface ScriptEngine {
+public abstract class ScriptTest {
 
-  String value();
+  @ClassRule
+  public static ScriptEngineRule scriptEngine = new ScriptEngineRule();
+
+  @Rule
+  public ScriptRule script = new ScriptRule();
+
+  protected void failingWithException() throws Throwable {
+    try {
+      script.execute();
+    }
+    catch (SpinScriptException e) {
+      throw e.getCause().getCause().getCause();
+    }
+  }
+
+  protected void failingWithException(Map<String, Object> variables) throws Throwable {
+    try {
+      script.execute(variables);
+    }
+    catch (SpinScriptException e) {
+      throw e.getCause().getCause().getCause();
+    }
+  }
 
 }

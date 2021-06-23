@@ -29,9 +29,9 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.camunda.spin.SpinList;
-import org.camunda.spin.test.Script;
-import org.camunda.spin.test.ScriptTest;
-import org.camunda.spin.test.ScriptVariable;
+import org.camunda.spin.impl.test.Script;
+import org.camunda.spin.impl.test.ScriptTest;
+import org.camunda.spin.impl.test.ScriptVariable;
 import org.camunda.spin.xml.SpinXmlAttribute;
 import org.camunda.spin.xml.SpinXmlAttributeException;
 import org.camunda.spin.xml.SpinXmlElement;
