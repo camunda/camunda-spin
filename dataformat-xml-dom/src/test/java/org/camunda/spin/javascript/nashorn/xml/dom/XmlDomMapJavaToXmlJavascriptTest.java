@@ -19,9 +19,6 @@ package org.camunda.spin.javascript.nashorn.xml.dom;
 import org.camunda.spin.test.ScriptEngine;
 import org.camunda.spin.xml.dom.XmlDomMapJavaToXmlScriptTest;
 
-/**
- * @author Stefan Hentschel.
- */
 @ScriptEngine("nashorn")
 public class XmlDomMapJavaToXmlJavascriptTest extends XmlDomMapJavaToXmlScriptTest {
 }

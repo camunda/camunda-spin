@@ -19,10 +19,6 @@ package org.camunda.spin.javascript.nashorn.xml.dom;
 import org.camunda.spin.test.ScriptEngine;
 import org.camunda.spin.xml.dom.XmlDomCreateScriptTest;
 
-/**
- * @author Daniel Meyer
- *
- */
 @ScriptEngine("nashorn")
 public class XmlDomCreateJavascriptTest extends XmlDomCreateScriptTest {
 

@@ -24,9 +24,6 @@ import org.camunda.spin.test.ScriptVariable;
 import org.camunda.spin.xml.dom.XmlDomElementScriptTest;
 import org.junit.Test;
 
-/**
- * @author Sebastian Menski
- */
 @ScriptEngine("nashorn")
 public class XmlDomElementJavascriptTest extends XmlDomElementScriptTest {
 

@@ -19,9 +19,6 @@ package org.camunda.spin.javascript.nashorn.json.tree;
 import org.camunda.spin.json.tree.JsonTreeMapJsonToJavaScriptTest;
 import org.camunda.spin.test.ScriptEngine;
 
-/**
- * @author Sebastian Menski
- */
 @ScriptEngine("nashorn")
 public class JsonTreeMapJsonToJavaJavascriptTest extends JsonTreeMapJsonToJavaScriptTest {
 }

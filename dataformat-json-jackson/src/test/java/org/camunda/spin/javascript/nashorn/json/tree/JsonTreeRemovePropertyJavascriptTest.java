@@ -19,10 +19,6 @@ package org.camunda.spin.javascript.nashorn.json.tree;
 import org.camunda.spin.json.tree.JsonTreeRemovePropertyScriptTest;
 import org.camunda.spin.test.ScriptEngine;
 
-/**
- * @author Thorben Lindhauer
- *
- */
 @ScriptEngine("nashorn")
 public class JsonTreeRemovePropertyJavascriptTest extends JsonTreeRemovePropertyScriptTest {
 

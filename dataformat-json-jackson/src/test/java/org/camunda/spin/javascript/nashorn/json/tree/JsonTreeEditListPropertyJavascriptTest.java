@@ -21,10 +21,6 @@ import org.camunda.spin.test.ScriptEngine;
 import org.junit.Ignore;
 import org.junit.Test;
 
-/**
- * @author Stefan Hentschel
- *
- */
 @ScriptEngine("nashorn")
 public class JsonTreeEditListPropertyJavascriptTest extends JsonTreeEditListPropertyScriptTest {
 

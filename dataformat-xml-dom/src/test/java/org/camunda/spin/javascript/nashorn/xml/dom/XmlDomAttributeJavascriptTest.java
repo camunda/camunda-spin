@@ -19,9 +19,6 @@ package org.camunda.spin.javascript.nashorn.xml.dom;
 import org.camunda.spin.test.ScriptEngine;
 import org.camunda.spin.xml.dom.XmlDomAttributeScriptTest;
 
-/**
- * @author Sebastian Menski
- */
 @ScriptEngine("nashorn")
 public class XmlDomAttributeJavascriptTest extends XmlDomAttributeScriptTest {
 }

@@ -19,9 +19,6 @@ package org.camunda.spin.test.script;
 import org.camunda.spin.test.ScriptEngine;
 import org.camunda.spin.test.ScriptRuleTest;
 
-/**
- * @author Sebastian Menski
- */
 @ScriptEngine("nashorn")
 public class JavascriptScriptRuleNashornTest extends ScriptRuleTest {
 }

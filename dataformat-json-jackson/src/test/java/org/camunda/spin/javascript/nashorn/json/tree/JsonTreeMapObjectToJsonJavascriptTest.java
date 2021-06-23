@@ -23,8 +23,6 @@ import org.junit.Ignore;
 /**
  * Note: Jackson is apparently not able to map Nashorn's internal representations
  * of javascript objects and arrays.
- *
- * @author Thorben Lindhauer
  */
 @Ignore
 @ScriptEngine("nashorn")
