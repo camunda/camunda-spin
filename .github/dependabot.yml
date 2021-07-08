@@ -1,0 +1,37 @@
+version: 2
+updates:
+- package-ecosystem: maven
+  directory: "/"
+  schedule:
+    interval: weekly
+    timezone: Europe/Berlin
+  ignore:
+  - dependency-name: org.jruby:jruby-complete
+    versions:
+    - 9.2.14.0
+    - 9.2.15.0
+    - 9.2.16.0
+  - dependency-name: net.javacrumbs.json-unit:json-unit-fluent
+    versions:
+    - 2.22.1
+    - 2.24.0
+- package-ecosystem: maven
+  directory: "/core"
+  schedule:
+    interval: weekly
+    timezone: Europe/Berlin
+- package-ecosystem: maven
+  directory: "/dataformat-all"
+  schedule:
+    interval: weekly
+    timezone: Europe/Berlin
+- package-ecosystem: maven
+  directory: "/dataformat-json-jackson"
+  schedule:
+    interval: weekly
+    timezone: Europe/Berlin
+- package-ecosystem: maven
+  directory: "/dataformat-xml-dom"
+  schedule:
+    interval: weekly
+    timezone: Europe/Berlin
