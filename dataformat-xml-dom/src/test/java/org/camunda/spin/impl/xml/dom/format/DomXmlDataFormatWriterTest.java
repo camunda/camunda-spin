@@ -19,20 +19,41 @@ public class DomXmlDataFormatWriterTest {
 
   @Test
   public void testFormattedOutputIsDeterministic() {
+    // given
     String xml = "<order><product>Milk</product><product>Coffee</product></order>";
     SpinXmlElement xml1 = SpinXmlElement.XML(xml);
+
+    // when
     SpinXmlElement xml2 = SpinXmlElement.XML(xml1.toString());
-    assertThat(xml2.toString()).isEqualTo(xml1.toString());
     SpinXmlElement xml3 = SpinXmlElement.XML(xml2.toString());
-    assertThat(xml3.toString()).isEqualTo(xml2.toString());
+
+    // then
+    assertThat(xml2).hasToString(xml1.toString());
+    assertThat(xml3).hasToString(xml2.toString());
+  }
+
+  @Test
+  public void testLazyTemplatesWithoutInit() {
+    // given
+    DomXmlDataFormat dataFormat = new DomXmlDataFormat("xml");
+
+    // when
+    DomXmlDataFormatWriter underTest = dataFormat.getWriter();
+
+    // then
+    assertThat(underTest.formattingTemplates).isNull();
   }
 
   @Test
   public void testLazyTemplatesInit() {
+    // given
     DomXmlDataFormat dataFormat = new DomXmlDataFormat("xml");
+
+    // when
     DomXmlDataFormatWriter underTest = dataFormat.getWriter();
-    assertThat(underTest.formattingTemplates).isNull();
     Templates templates = underTest.getFormattingTemplates();
+
+    // then
     assertThat(underTest.formattingTemplates).isNotNull();
     assertThat(underTest.getFormattingTemplates()).isSameAs(templates);
     assertThat(underTest.getFormattingTemplates()).isSameAs(templates);
@@ -40,6 +61,7 @@ public class DomXmlDataFormatWriterTest {
 
   @Test
   public void testPrettyPrintFeature() {
+    // given
     DomXmlDataFormat dataFormat = new DomXmlDataFormat("xml");
     DomXmlDataFormatReader reader = dataFormat.getReader();
     DomXmlDataFormatWriter underTest = dataFormat.getWriter();
@@ -51,36 +73,49 @@ public class DomXmlDataFormatWriterTest {
         + "  <product>Coffee</product>\n"
         + "</order>\n";
 
-    String nonformattedXml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><order><product>Milk</product><product>Coffee</product></order>";
-
     Element input = reader.readInput(SpinIoUtil.stringAsReader(xml));
 
     // enable pretty-print (the default behaviour)
     dataFormat.setPrettyPrint(true);
     StringWriter writer = new StringWriter();
-    underTest.writeToWriter(writer, input);
-
-    assertThat(writer.toString()).isEqualTo(formattedXml);
-
-    Element clone = reader.readInput(SpinIoUtil.stringAsReader(writer.toString()));
     StringWriter cloneWriter = new StringWriter();
+
+    // when
+    underTest.writeToWriter(writer, input);
+    Element clone = reader.readInput(SpinIoUtil.stringAsReader(writer.toString()));
     underTest.writeToWriter(cloneWriter, clone);
 
-    assertThat(cloneWriter.toString()).isEqualTo(writer.toString());
+    // then
+    assertThat(writer).hasToString(formattedXml);
+    assertThat(cloneWriter).hasToString(writer.toString());
+  }
 
+  @Test
+  public void testNoPrettyPrintFeature() {
+    // given
+    DomXmlDataFormat dataFormat = new DomXmlDataFormat("xml");
+    DomXmlDataFormatReader reader = dataFormat.getReader();
+    DomXmlDataFormatWriter underTest = dataFormat.getWriter();
+
+    String xml = "<order><product>Milk</product><product>Coffee</product></order>";
+
+    String nonformattedXml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><order><product>Milk</product><product>Coffee</product></order>";
+
+    Element input = reader.readInput(SpinIoUtil.stringAsReader(xml));
 
     // disable pretty-print
     dataFormat.setPrettyPrint(false);
-    writer = new StringWriter();
+    StringWriter writer = new StringWriter();
+    StringWriter cloneWriter = new StringWriter();
+
+    // when
     underTest.writeToWriter(writer, input);
-
-    assertThat(writer.toString()).isEqualTo(nonformattedXml);
-
-    clone = reader.readInput(SpinIoUtil.stringAsReader(writer.toString()));
-    cloneWriter = new StringWriter();
+    Element clone = reader.readInput(SpinIoUtil.stringAsReader(writer.toString()));
     underTest.writeToWriter(cloneWriter, clone);
 
-    assertThat(cloneWriter.toString()).isEqualTo(writer.toString());
+    // then
+    assertThat(writer).hasToString(nonformattedXml);
+    assertThat(cloneWriter).hasToString(writer.toString());
   }
 
 }

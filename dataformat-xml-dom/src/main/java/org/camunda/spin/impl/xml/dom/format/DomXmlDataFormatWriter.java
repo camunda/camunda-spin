@@ -38,15 +38,13 @@ import org.w3c.dom.Node;
  * A writer for XML DOM.
  *
  * @author Daniel Meyer
- * @author Lars Uffmann
- * @author Joern Muehlencord
  *
  */
 public class DomXmlDataFormatWriter implements DataFormatWriter {
 
   protected static final DomXmlLogger LOG = DomXmlLogger.XML_DOM_LOGGER;
 
-  private static final String STRIP_SPACE_XSL = "org/camunda/spin/impl/xml/dom/format/strip-space.xsl";
+  protected static final String STRIP_SPACE_XSL = "org/camunda/spin/impl/xml/dom/format/strip-space.xsl";
 
   protected DomXmlDataFormat domXmlDataFormat;
 

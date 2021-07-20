@@ -32,8 +32,6 @@ import org.w3c.dom.Element;
 
 /**
  * @author Daniel Meyer
- * @author Lars Uffmann
- * @author Joern Muehlencord
  *
  */
 public class DomXmlDataFormat implements DataFormat<SpinXmlElement> {
