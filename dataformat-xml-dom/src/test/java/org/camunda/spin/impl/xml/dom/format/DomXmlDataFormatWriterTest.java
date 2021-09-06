@@ -11,9 +11,6 @@ import org.w3c.dom.Element;
 
 /**
  * Test xml transformation in DomXmlDataFormatWriter
- *
- * @author Lars Uffmann, 2020-10-16
- * @author Joern Muehlencord
  */
 public class DomXmlDataFormatWriterTest {
 

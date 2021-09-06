@@ -53,7 +53,7 @@ public class DomXmlDataFormat implements DataFormat<SpinXmlElement> {
 
   protected final String name;
 
-  protected boolean prettyPrint = true;
+  protected boolean prettyPrint;
 
   public DomXmlDataFormat(String name) {
     this(name, defaultDocumentBuilderFactory());
@@ -74,6 +74,8 @@ public class DomXmlDataFormat implements DataFormat<SpinXmlElement> {
   public DomXmlDataFormat(String name, DocumentBuilderFactory documentBuilderFactory, TransformerFactory transformerFactory, JaxBContextProvider contextProvider) {
     this.name = name;
     this.documentBuilderFactory = documentBuilderFactory;
+    this.prettyPrint = true;
+
     LOG.usingDocumentBuilderFactory(documentBuilderFactory.getClass().getName());
 
     this.transformerFactory = transformerFactory;
