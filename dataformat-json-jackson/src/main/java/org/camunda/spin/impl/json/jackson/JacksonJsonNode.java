@@ -154,6 +154,24 @@ public class JacksonJsonNode extends SpinJsonNode {
     }
   }
 
+  public boolean contains(Object searchObject) {
+    ensureNotNull("searchObject", searchObject);
+    if(this.isArray()) {
+      JsonNode node = dataFormat.createJsonNode(searchObject);
+      for (Iterator<JsonNode> nodeIterator = jsonNode.elements(); nodeIterator.hasNext();) {
+        JsonNode n = nodeIterator.next();
+        if (n.equals(node)) {
+          return true;
+        }
+      }
+
+      // when searchObject is not found
+      return false;
+    } else {
+      throw LOG.unableToGetIndex(jsonNode.getNodeType().name());
+    }
+  }
+
   public boolean isObject() {
     return jsonNode.isObject();
   }

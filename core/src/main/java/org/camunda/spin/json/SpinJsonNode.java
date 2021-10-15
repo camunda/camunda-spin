@@ -45,10 +45,21 @@ public abstract class SpinJsonNode extends Spin<SpinJsonNode> {
    * Fetches the last index of the searched object in an array.
    *
    * @param searchObject Object for which the index should be searched.
-   * @return {@link Integer} index of searchObject or -1 if object not found.
+   * @return {@link Integer} index of searchObject.
    * @throws SpinJsonException if the current node is not an array.
+   * @throws SpinJsonPropertyException if object is not found.
    */
   public abstract Integer lastIndexOf(Object searchObject);
+
+  /**
+   * Fetches the last index of the searched object in an array.
+   *
+   * @param searchObject Object for which the index should be searched.
+   * @return {@link Integer} index of searchObject.
+   * @throws SpinJsonException if the current node is not an array.
+   * @throws SpinJsonPropertyException if object is not found.
+   */
+  public abstract boolean contains(Object searchObject);
 
   /**
    * Check if this node is an object node.
