@@ -40,6 +40,7 @@ import org.junit.Test;
  * 7) remove
  * 8) removeLast
  * 9) removeAt
+ * 10) contains
  *
  * @author Stefan Hentschel
  */
