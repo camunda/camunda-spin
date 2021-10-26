@@ -111,7 +111,7 @@ public class JacksonJsonNode extends SpinJsonNode {
     return newIndex;
   }
 
-  private int lookupArray(JsonNode searchNode, int direction) {
+  protected int lookupArray(JsonNode searchNode, int direction) {
     if(!this.isArray()) {
       throw LOG.unableToGetIndex(jsonNode.getNodeType().name());
     }
