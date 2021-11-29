@@ -208,9 +208,10 @@ public class DomXmlDataFormat implements DataFormat<SpinXmlElement> {
   }
 
   /*
-   * Configures the DocumentBuilderFactory in a way, that it is protected against XML External Entity Attacks.
-   * If the implementing parser does not support one or multiple features, the failed feature is ignored.
-   * The parser might not protected, if the feature assignment fails.
+   * Configures the DocumentBuilderFactory in a way, that it is protected against
+   * XML External Entity Attacks. If the implementing parser does not support one or
+   * multiple features, the failed feature is ignored. The parser might not be protected,
+   * if the feature assignment fails.
    *
    * @see <a href="https://www.owasp.org/index.php/XML_External_Entity_(XXE)_Prevention_Cheat_Sheet">OWASP Information of XXE attacks</a>
    *
@@ -231,6 +232,9 @@ public class DomXmlDataFormat implements DataFormat<SpinXmlElement> {
 
   /*
    * Configures the DocumentBuilderFactory to process XML securely.
+   * If the implementing parser does not support one or multiple features,
+   * the failed feature is ignored. The parser might not be protected,
+   * if the feature assignment fails.
    *
    * @param dbf The factory to configure.
    */
