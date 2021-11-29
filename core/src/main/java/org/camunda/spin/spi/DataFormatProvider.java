@@ -35,11 +35,11 @@ public interface DataFormatProvider {
   DataFormat<?> createInstance();
 
   /**
-   * Adds a Map of configuration properties to the DataFormatProvider implementation to be
-   * used to configure the provided data format.
+   * @return an instance of the data format provided by this implementation configured using the
+   * passed configuration properties.
    */
-  default void setConfigurationProperties(Map<String, Object> configurationProperties) {
-    // don't use configuration properties by default
+  default DataFormat<?> createInstance(Map<String, Object> configurationProperties) {
+    return createInstance();
   };
 
 }

@@ -16,7 +16,6 @@
  */
 package org.camunda.spin.xml.dom.format.spi;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.io.InputStream;
@@ -49,22 +48,6 @@ public class DomXmlDataFormatProtectionTest {
     })
         // then
         .isInstanceOf(SpinXmlDataFormatException.class);
-  }
-
-  @Test
-  public void shouldNotOverrideExternalSchemaAccess() {
-    // given
-    System.setProperty("javax.xml.accessExternalSchema", "");
-    String testXml = "org/camunda/spin/xml/dom/format/spi/ExternalSchemaAccess.xml";
-    InputStream testXmlAsStream = this.getClass().getClassLoader().getResourceAsStream(testXml);
-
-    try {
-      // when
-      format.getReader().readInput(new InputStreamReader(testXmlAsStream));
-    } finally {
-      // then
-      System.clearProperty("javax.xml.accessExternalSchema");
-    }
   }
 
   @Test

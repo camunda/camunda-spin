@@ -159,13 +159,19 @@ public class DataFormats {
     ServiceLoader<DataFormatProvider> providerLoader = ServiceLoader.load(DataFormatProvider.class, classloader);
 
     for (DataFormatProvider provider : providerLoader) {
-      provider.setConfigurationProperties(configurationProperties);
       LOG.logDataFormatProvider(provider);
-      registerProvider(dataFormats, provider);
+      registerProvider(dataFormats, provider, configurationProperties);
     }
   }
 
-  protected void registerProvider(Map<String, DataFormat<?>> dataFormats, DataFormatProvider provider) {
+  protected void registerProvider(Map<String, DataFormat<?>> dataFormats,
+                                  DataFormatProvider provider) {
+    registerProvider(dataFormats, provider, Collections.EMPTY_MAP);
+  }
+
+  protected void registerProvider(Map<String, DataFormat<?>> dataFormats,
+                                  DataFormatProvider provider,
+                                  Map<String, Object> configurationProperties) {
 
     String dataFormatName = provider.getDataFormatName();
 
@@ -173,7 +179,7 @@ public class DataFormats {
       throw LOG.multipleProvidersForDataformat(dataFormatName);
     }
     else {
-      DataFormat<?> dataFormatInstance = provider.createInstance();
+      DataFormat<?> dataFormatInstance = provider.createInstance(configurationProperties);
       dataFormats.put(dataFormatName, dataFormatInstance);
     }
   }
