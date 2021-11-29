@@ -27,7 +27,6 @@ public class CustomDataFormatProvider implements DataFormatProvider {
 
   public static final String NAME = "test-data-format";
   public static final ExampleCustomDataFormat DATA_FORMAT = new ExampleCustomDataFormat(NAME);
-  protected Map<String, Object> configProperties;
 
   @Override
   public String getDataFormatName() {
@@ -36,14 +35,15 @@ public class CustomDataFormatProvider implements DataFormatProvider {
 
   @Override
   public DataFormat<?> createInstance() {
-    boolean conditionalProperty = (boolean) configProperties.getOrDefault("conditional-prop", false);
-    DATA_FORMAT.setConditionalProperty(conditionalProperty);
     return DATA_FORMAT;
   }
 
   @Override
-  public void setConfigurationProperties(Map<String, Object> configurationProperties) {
-    this.configProperties = configurationProperties;
+  public DataFormat<?> createInstance(Map<String, Object> configurationProperties) {
+    boolean conditionalProperty = (boolean) configurationProperties.getOrDefault("conditional-prop", false);
+    DATA_FORMAT.setConditionalProperty(conditionalProperty);
+    return DATA_FORMAT;
   }
+
 }
 
