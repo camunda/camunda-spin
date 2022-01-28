@@ -16,7 +16,6 @@
  */
 package org.camunda.spin.impl.xml.dom.format;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.Writer;
 import javax.xml.transform.OutputKeys;
@@ -38,7 +37,6 @@ import org.w3c.dom.Node;
  * A writer for XML DOM.
  *
  * @author Daniel Meyer
- *
  */
 public class DomXmlDataFormatWriter implements DataFormatWriter {
 
@@ -70,28 +68,18 @@ public class DomXmlDataFormatWriter implements DataFormatWriter {
     }
   }
 
-  protected Templates formattingTemplates = null;
 
   /**
-   * Return a {@link Templates} instance for the strip-spaces.xsl stylesheet.
-   * The Templates instance is initialized lazily in order to use the configured
-   * {@link TransformerFactory} from the {@link DomXmlDataFormat}.
+   * Return a {@link Templates} instance for the strip-spaces.xsl stylesheet. The Templates instance is initialized
+   * lazily in order to use the configured {@link TransformerFactory} from the {@link DomXmlDataFormat}.
    *
    * @return the templates instance for strip-spaces.xsl.
    */
-  protected synchronized Templates getFormattingTemplates() {
-    if (null == formattingTemplates) {
-      TransformerFactory transformerFactory = domXmlDataFormat.getTransformerFactory();
-      try {
-        try (InputStream xslIn = Thread.currentThread().getContextClassLoader().getResourceAsStream(STRIP_SPACE_XSL)) {
-          Source xslt = new StreamSource(xslIn);
-          formattingTemplates = transformerFactory.newTemplates(xslt);
-        }
-      } catch (TransformerConfigurationException | IOException e) {
-        LOG.unableToCreateTransformer(e);
-      }
-    }
-    return formattingTemplates;
+  private Templates getFormattingTemplates() throws TransformerConfigurationException {
+    TransformerFactory transformerFactory = domXmlDataFormat.getTransformerFactory();
+    InputStream xslIn = Thread.currentThread().getContextClassLoader().getResourceAsStream(STRIP_SPACE_XSL);
+    Source xslt = new StreamSource(xslIn);
+    return transformerFactory.newTemplates(xslt);
   }
 
   /**

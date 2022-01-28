@@ -2,117 +2,133 @@ package org.camunda.spin.impl.xml.dom.format;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.io.StringWriter;
-import javax.xml.transform.Templates;
-import org.camunda.spin.impl.util.SpinIoUtil;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
+import org.camunda.spin.DataFormats;
+import org.camunda.spin.Spin;
+import org.camunda.spin.spi.DataFormat;
 import org.camunda.spin.xml.SpinXmlElement;
 import org.junit.Test;
-import org.w3c.dom.Element;
 
 /**
  * Test xml transformation in DomXmlDataFormatWriter
  */
 public class DomXmlDataFormatWriterTest {
 
-  @Test
-  public void testFormattedOutputIsDeterministic() {
-    // given
-    String xml = "<order><product>Milk</product><product>Coffee</product></order>";
-    SpinXmlElement xml1 = SpinXmlElement.XML(xml);
+  private final String newLine = System.getProperty("line.separator");
+  private final String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><order><product>Milk</product><product>Coffee</product></order>";
 
-    // when
-    SpinXmlElement xml2 = SpinXmlElement.XML(xml1.toString());
-    SpinXmlElement xml3 = SpinXmlElement.XML(xml2.toString());
+  private final String formattedXml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><order>" + newLine
+      + "  <product>Milk</product>" + newLine
+      + "  <product>Coffee</product>" + newLine
+      + "</order>" + newLine;
 
-    // then
-    assertThat(xml2).hasToString(xml1.toString());
-    assertThat(xml3).hasToString(xml2.toString());
+
+  // this is what execution.setVariable("test", spinXml); does
+  // see https://github.com/camunda/camunda-bpm-platform/blob/master/engine-plugins/spin-plugin/src/main/java/org/camunda/spin/plugin/impl/SpinValueSerializer.java
+  private byte[] serializeValue(SpinXmlElement spinXml) throws UnsupportedEncodingException {
+    ByteArrayOutputStream out = new ByteArrayOutputStream();
+    OutputStreamWriter outWriter = new OutputStreamWriter(out, "UTF-8");
+    BufferedWriter bufferedWriter = new BufferedWriter(outWriter);
+
+    spinXml.writeToWriter(bufferedWriter);
+    return out.toByteArray();
   }
 
-  @Test
-  public void testLazyTemplatesWithoutInit() {
-    // given
-    DomXmlDataFormat dataFormat = new DomXmlDataFormat("xml");
+  public SpinXmlElement deserializeValue(byte[] serialized, DataFormat<SpinXmlElement> dataFormat)
+      throws UnsupportedEncodingException {
+    ByteArrayInputStream bais = new ByteArrayInputStream(serialized);
+    InputStreamReader inReader = new InputStreamReader(bais, "UTF-8");
+    BufferedReader bufferedReader = new BufferedReader(inReader);
 
-    // when
-    DomXmlDataFormatWriter underTest = dataFormat.getWriter();
-
-    // then
-    assertThat(underTest.formattingTemplates).isNull();
+    Object wrapper = dataFormat.getReader().readInput(bufferedReader);
+    return dataFormat.createWrapperInstance(wrapper);
   }
 
+  /**
+   * standard behaviour: an unformatted XML will be formatted stored into a SPIN variable and also returned formatted.
+   */
   @Test
-  public void testLazyTemplatesInit() {
-    // given
-    DomXmlDataFormat dataFormat = new DomXmlDataFormat("xml");
+  public void testStandardFormatter() throws Exception {
+    DataFormat<SpinXmlElement> dataFormat = DataFormats.xml();
 
-    // when
-    DomXmlDataFormatWriter underTest = dataFormat.getWriter();
-    Templates templates = underTest.getFormattingTemplates();
+    SpinXmlElement spinXml = Spin.XML(xml);
+    byte[] serializedValue = serializeValue(spinXml);
 
-    // then
-    assertThat(underTest.formattingTemplates).isNotNull();
-    assertThat(underTest.getFormattingTemplates()).isSameAs(templates);
-    assertThat(underTest.getFormattingTemplates()).isSameAs(templates);
+    // assert that there are now new lines in the serialized value:
+    assertThat(new String(serializedValue, "UTF-8")).isEqualTo(formattedXml);
+
+    // this is what execution.getVariable("test"); does
+    SpinXmlElement spinXmlElement = deserializeValue(serializedValue, dataFormat);
+    assertThat(spinXmlElement.toString()).isEqualTo(formattedXml);
   }
 
+  /**
+   * behaviour fixed by CAM-13699: an already formatted XML will be formatted stored into a SPIN variable and also
+   * returned formatted but no additional blank lines are inserted into the XML.
+   */
   @Test
-  public void testPrettyPrintFeature() {
-    // given
-    DomXmlDataFormat dataFormat = new DomXmlDataFormat("xml");
-    DomXmlDataFormatReader reader = dataFormat.getReader();
-    DomXmlDataFormatWriter underTest = dataFormat.getWriter();
+  public void testAlreadyFormattedXml() throws Exception {
+    DataFormat<SpinXmlElement> dataFormat = DataFormats.xml();
 
-    String xml = "<order><product>Milk</product><product>Coffee</product></order>";
+    SpinXmlElement spinXml = Spin.XML(formattedXml);
+    byte[] serializedValue = serializeValue(spinXml);
 
-    String formattedXml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><order>\n"
-        + "  <product>Milk</product>\n"
-        + "  <product>Coffee</product>\n"
-        + "</order>\n";
+    // assert that there are no new lines in the serialized value:
+    assertThat(new String(serializedValue, "UTF-8")).isEqualTo(formattedXml);
 
-    Element input = reader.readInput(SpinIoUtil.stringAsReader(xml));
-
-    // enable pretty-print (the default behaviour)
-    dataFormat.setPrettyPrint(true);
-    StringWriter writer = new StringWriter();
-    StringWriter cloneWriter = new StringWriter();
-
-    // when
-    underTest.writeToWriter(writer, input);
-    Element clone = reader.readInput(SpinIoUtil.stringAsReader(writer.toString()));
-    underTest.writeToWriter(cloneWriter, clone);
-
-    // then
-    assertThat(writer).hasToString(formattedXml);
-    assertThat(cloneWriter).hasToString(writer.toString());
+    // this is what execution.getVariable("test"); does
+    SpinXmlElement spinXmlElement = deserializeValue(serializedValue, dataFormat);
+    assertThat(spinXmlElement.toString()).isEqualTo(formattedXml);
   }
 
+  /**
+   * new feature provided by CAM-13699 - pretty print feature disabled. The XML is stored and returned as is.
+   */
   @Test
-  public void testNoPrettyPrintFeature() {
-    // given
-    DomXmlDataFormat dataFormat = new DomXmlDataFormat("xml");
-    DomXmlDataFormatReader reader = dataFormat.getReader();
-    DomXmlDataFormatWriter underTest = dataFormat.getWriter();
+  public void testDisabledPrettyPrintUnformatted() throws Exception {
+    DataFormat<SpinXmlElement> dataFormat = DataFormats.xml();
+    ((DomXmlDataFormat) dataFormat).setPrettyPrint(false);
 
-    String xml = "<order><product>Milk</product><product>Coffee</product></order>";
+    SpinXmlElement spinXml = Spin.XML(xml);
+    byte[] serializedValue = serializeValue(spinXml);
 
-    String nonformattedXml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><order><product>Milk</product><product>Coffee</product></order>";
+    // assert that xml has not been formatted
+    assertThat(new String(serializedValue, "UTF-8")).isEqualTo(xml);
 
-    Element input = reader.readInput(SpinIoUtil.stringAsReader(xml));
-
-    // disable pretty-print
-    dataFormat.setPrettyPrint(false);
-    StringWriter writer = new StringWriter();
-    StringWriter cloneWriter = new StringWriter();
-
-    // when
-    underTest.writeToWriter(writer, input);
-    Element clone = reader.readInput(SpinIoUtil.stringAsReader(writer.toString()));
-    underTest.writeToWriter(cloneWriter, clone);
-
-    // then
-    assertThat(writer).hasToString(nonformattedXml);
-    assertThat(cloneWriter).hasToString(writer.toString());
+    // this is what execution.getVariable("test"); does
+    SpinXmlElement spinXmlElement = deserializeValue(serializedValue, dataFormat);
+    assertThat(spinXmlElement.toString()).isEqualTo(xml);
   }
 
+  /**
+   * new feature provided by CAM-13699 - pretty print feature disabled. The XML is stored and returned as is.
+   */
+  @Test
+  public void testDisabledPrettyPrintFormatted() throws Exception {
+
+    // TODO - why is the blank line at the end removed!?
+    String expectedXml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><order>" + newLine
+        + "  <product>Milk</product>" + newLine
+        + "  <product>Coffee</product>" + newLine
+        + "</order>";
+
+    DataFormat<SpinXmlElement> dataFormat = DataFormats.xml();
+    ((DomXmlDataFormat) dataFormat).setPrettyPrint(false);
+
+    SpinXmlElement spinXml = Spin.XML(formattedXml);
+    byte[] serializedValue = serializeValue(spinXml);
+
+    // assert that xml has not been formatted
+    assertThat(new String(serializedValue, "UTF-8")).isEqualTo(expectedXml);
+
+    // this is what execution.getVariable("test"); does
+    SpinXmlElement spinXmlElement = deserializeValue(serializedValue, dataFormat);
+    assertThat(spinXmlElement.toString()).isEqualTo(expectedXml);
+  }
 }
