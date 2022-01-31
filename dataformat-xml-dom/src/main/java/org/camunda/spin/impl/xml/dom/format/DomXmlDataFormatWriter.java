@@ -77,7 +77,7 @@ public class DomXmlDataFormatWriter implements DataFormatWriter {
    */
   private Templates getFormattingTemplates() throws TransformerConfigurationException {
     TransformerFactory transformerFactory = domXmlDataFormat.getTransformerFactory();
-    InputStream xslIn = Thread.currentThread().getContextClassLoader().getResourceAsStream(STRIP_SPACE_XSL);
+    InputStream xslIn = DomXmlDataFormatWriter.class.getClassLoader().getResourceAsStream(STRIP_SPACE_XSL);
     Source xslt = new StreamSource(xslIn);
     return transformerFactory.newTemplates(xslt);
   }
