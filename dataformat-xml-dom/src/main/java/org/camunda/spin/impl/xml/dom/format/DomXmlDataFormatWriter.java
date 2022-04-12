@@ -16,6 +16,7 @@
  */
 package org.camunda.spin.impl.xml.dom.format;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.Writer;
 import javax.xml.transform.OutputKeys;
@@ -45,9 +46,11 @@ public class DomXmlDataFormatWriter implements DataFormatWriter {
   protected static final String STRIP_SPACE_XSL = "org/camunda/spin/impl/xml/dom/format/strip-space.xsl";
 
   protected DomXmlDataFormat domXmlDataFormat;
+  protected Templates formattingTemplates;
 
   public DomXmlDataFormatWriter(DomXmlDataFormat domXmlDataFormat) {
     this.domXmlDataFormat = domXmlDataFormat;
+    this.formattingTemplates = reloadFormattingTemplates();
   }
 
   public void writeToWriter(Writer writer, Object input) {
@@ -75,11 +78,20 @@ public class DomXmlDataFormatWriter implements DataFormatWriter {
    *
    * @return the templates instance for strip-spaces.xsl.
    */
-  private Templates getFormattingTemplates() throws TransformerConfigurationException {
+  protected Templates reloadFormattingTemplates() {
     TransformerFactory transformerFactory = domXmlDataFormat.getTransformerFactory();
-    InputStream xslIn = DomXmlDataFormatWriter.class.getClassLoader().getResourceAsStream(STRIP_SPACE_XSL);
-    Source xslt = new StreamSource(xslIn);
-    return transformerFactory.newTemplates(xslt);
+    try {
+      InputStream xslIn = DomXmlDataFormatWriter.class.getClassLoader().getResourceAsStream(STRIP_SPACE_XSL);
+      if (xslIn == null) {
+        throw LOG.unableToFindStripSpaceXsl(STRIP_SPACE_XSL);
+      }
+      Source xslt = new StreamSource(xslIn);
+      Templates newTemplates = transformerFactory.newTemplates(xslt);
+      xslIn.close();
+      return newTemplates;
+    } catch (IOException | TransformerConfigurationException ex) {
+      throw LOG.unableToLoadFormattingTemplates(ex);
+    }
   }
 
   /**
@@ -90,7 +102,7 @@ public class DomXmlDataFormatWriter implements DataFormatWriter {
    */
   protected Transformer getFormattingTransformer() {
     try {
-      Transformer transformer = getFormattingTemplates().newTransformer();
+      Transformer transformer = formattingTemplates.newTransformer();
       transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
       transformer.setOutputProperty(OutputKeys.INDENT, "yes");
       transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");

@@ -165,6 +165,7 @@ public class DomXmlDataFormat implements DataFormat<SpinXmlElement> {
 
   public void setTransformerFactory(TransformerFactory transformerFactory) {
     this.transformerFactory = transformerFactory;
+    this.writer.reloadFormattingTemplates();
   }
 
   public void setJaxBContextProvider(JaxBContextProvider jaxBContextProvider) {

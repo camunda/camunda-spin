@@ -11,6 +11,7 @@ import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import org.camunda.spin.DataFormats;
 import org.camunda.spin.Spin;
+import org.camunda.spin.SpinFactory;
 import org.camunda.spin.spi.DataFormat;
 import org.camunda.spin.xml.SpinXmlElement;
 import org.junit.Test;
@@ -55,9 +56,9 @@ public class DomXmlDataFormatWriterTest {
    */
   @Test
   public void testStandardFormatter() throws Exception {
-    DataFormat<SpinXmlElement> dataFormat = DataFormats.xml();
+    DataFormat<SpinXmlElement> dataFormat = new DomXmlDataFormat(DataFormats.XML_DATAFORMAT_NAME);
 
-    SpinXmlElement spinXml = Spin.XML(xml);
+    SpinXmlElement spinXml = SpinFactory.INSTANCE.createSpin(xml, dataFormat);
     byte[] serializedValue = serializeValue(spinXml);
 
     // assert that there are now new lines in the serialized value:
@@ -74,9 +75,9 @@ public class DomXmlDataFormatWriterTest {
    */
   @Test
   public void testAlreadyFormattedXml() throws Exception {
-    DataFormat<SpinXmlElement> dataFormat = DataFormats.xml();
+    DataFormat<SpinXmlElement> dataFormat = new DomXmlDataFormat(DataFormats.XML_DATAFORMAT_NAME);
 
-    SpinXmlElement spinXml = Spin.XML(formattedXml);
+    SpinXmlElement spinXml = SpinFactory.INSTANCE.createSpin(formattedXml, dataFormat);
     byte[] serializedValue = serializeValue(spinXml);
 
     // assert that there are no new lines in the serialized value:
@@ -92,10 +93,10 @@ public class DomXmlDataFormatWriterTest {
    */
   @Test
   public void testDisabledPrettyPrintUnformatted() throws Exception {
-    DataFormat<SpinXmlElement> dataFormat = DataFormats.xml();
+    DataFormat<SpinXmlElement> dataFormat = new DomXmlDataFormat(DataFormats.XML_DATAFORMAT_NAME);
     ((DomXmlDataFormat) dataFormat).setPrettyPrint(false);
 
-    SpinXmlElement spinXml = Spin.XML(xml);
+    SpinXmlElement spinXml = SpinFactory.INSTANCE.createSpin(xml, dataFormat);
     byte[] serializedValue = serializeValue(spinXml);
 
     // assert that xml has not been formatted
@@ -112,7 +113,6 @@ public class DomXmlDataFormatWriterTest {
   @Test
   public void testDisabledPrettyPrintFormatted() throws Exception {
 
-    // TODO - why is the blank line at the end removed!?
     String expectedXml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><order>" + newLine
         + "  <product>Milk</product>" + newLine
         + "  <product>Coffee</product>" + newLine
