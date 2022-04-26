@@ -23,8 +23,7 @@
   </modules>
 
   <properties>
-    <jackson.version>2.12.6</jackson.version>
-    <jackson.version.databind>${jackson.version}</jackson.version.databind>
+    <jackson.version>2.12.6.20220326</jackson.version>
     <commons.version>1.10.0</commons.version>
     <spin.version.old>1.11.2</spin.version.old>
     <groovy.version>2.4.13</groovy.version>
@@ -43,6 +42,14 @@
         <version>${commons.version}</version>
         <type>pom</type>
         <scope>import</scope>
+      </dependency>
+
+      <dependency>
+        <groupId>com.fasterxml.jackson</groupId>
+        <artifactId>jackson-bom</artifactId>
+        <version>${jackson.version}</version>
+        <scope>import</scope>
+        <type>pom</type>
       </dependency>
 
       <dependency>
@@ -103,18 +110,6 @@
         <groupId>ch.qos.logback</groupId>
         <artifactId>logback-classic</artifactId>
         <version>1.2.3</version>
-      </dependency>
-
-      <dependency>
-        <groupId>com.fasterxml.jackson.core</groupId>
-        <artifactId>jackson-core</artifactId>
-        <version>${jackson.version}</version>
-      </dependency>
-
-      <dependency>
-        <groupId>com.fasterxml.jackson.core</groupId>
-        <artifactId>jackson-databind</artifactId>
-        <version>${jackson.version.databind}</version>
       </dependency>
 
       <dependency>
