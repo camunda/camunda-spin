@@ -71,12 +71,10 @@ public class TypeHelper {
         do {
           element = iterator.next();
 
-          if (bindingsArePresent(value.getClass(), 1)) {
-            if (element != null || size == 1) {
-              JavaType elementType = constructType(element);
-              return typeFactory.constructCollectionType(guessCollectionType(value), elementType);
+          if (bindingsArePresent(value.getClass(), 1) && (element != null || size == 1)) {
+            JavaType elementType = constructType(element);
+            return typeFactory.constructCollectionType(guessCollectionType(value), elementType);
 
-            }
           }
         } while (iterator.hasNext() && element == null);
       }
@@ -91,13 +89,11 @@ public class TypeHelper {
         do {
           entry = iterator.next();
 
-          if (bindingsArePresent(value.getClass(), 2)) {
-            if (entry.getValue() != null || size == 1) {
-              JavaType keyType = constructType(entry.getKey());
-              JavaType valueType = constructType(entry.getValue());
-              return typeFactory.constructMapType(Map.class, keyType, valueType);
+          if (bindingsArePresent(value.getClass(), 2) && (entry.getValue() != null || size == 1)) {
+            JavaType keyType = constructType(entry.getKey());
+            JavaType valueType = constructType(entry.getValue());
+            return typeFactory.constructMapType(Map.class, keyType, valueType);
 
-            }
           }
         } while (iterator.hasNext() && entry.getValue() == null);
 
