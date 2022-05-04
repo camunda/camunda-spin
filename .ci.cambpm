@@ -4,5 +4,9 @@ buildMavenAndDeployToMavenCentral([
   mvn:3.5,
   additionalMvnGoals:'javadoc:javadoc',
   licenseCheck:true,
-  publishZipArtifactToCamundaOrg:true
+  publishZipArtifactToCamundaOrg:true,
+  extraJdks: [
+   'jdk-11-latest',
+   'jdk-17-latest'
+  ]
 ])

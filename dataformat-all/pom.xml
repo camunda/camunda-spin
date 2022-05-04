@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.camunda.spin</groupId>
     <artifactId>camunda-spin-root</artifactId>
-    <version>1.14.0-SNAPSHOT</version>
+    <version>1.15.0-SNAPSHOT</version>
   </parent>
 
   <artifactId>camunda-spin-dataformat-all</artifactId>
@@ -26,6 +26,11 @@
     <dependency>
       <groupId>org.camunda.spin</groupId>
       <artifactId>camunda-spin-dataformat-xml-dom</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>jakarta.xml.bind</groupId>
+      <artifactId>jakarta.xml.bind-api</artifactId>
     </dependency>
 
     <dependency>
@@ -92,10 +97,6 @@
                   <shadedPattern>spinjar.com.sun.xml.txw2</shadedPattern>
                 </relocation>
                 <relocation>
-                  <pattern>javax.xml.stream</pattern>
-                  <shadedPattern>spinjar.javax.xml.stream</shadedPattern>
-                </relocation>
-                <relocation>
                   <pattern>javax.xml.bind</pattern>
                   <shadedPattern>spinjar.javax.xml.bind</shadedPattern>
                 </relocation>
@@ -112,6 +113,12 @@
                   <artifact>com.sun.xml.bind:*</artifact>
                   <excludes>
                     <exclude>META-INF/services/javax.xml.bind.JAXBContext</exclude>
+                  </excludes>
+                </filter>
+                <filter>
+                  <artifact>*:*</artifact>
+                  <excludes>
+                    <exclude>module-info.class</exclude>
                   </excludes>
                 </filter>
               </filters>
@@ -131,7 +138,7 @@
            <additionalDependency>
              <groupId>junit</groupId>
              <artifactId>junit</artifactId>
-             <version>4.11</version>
+             <version>${junit.version}</version>
            </additionalDependency>
           </additionalDependencies>
         </configuration>
