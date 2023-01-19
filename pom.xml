@@ -23,7 +23,7 @@
   </modules>
 
   <properties>
-    <jackson.version>2.12.6.20220326</jackson.version>
+    <jackson.version>2.14.1</jackson.version>
     <commons.version>1.10.0</commons.version>
     <spin.version.old>1.11.5</spin.version.old>
     <groovy.version>2.4.13</groovy.version>
@@ -93,13 +93,13 @@
         <artifactId>jruby-complete</artifactId>
         <version>9.1.17.0</version>
       </dependency>
-      
+
       <dependency>
         <groupId>org.graalvm.js</groupId>
         <artifactId>js</artifactId>
         <version>${graal.js.version}</version>
       </dependency>
-      
+
       <dependency>
         <groupId>org.graalvm.js</groupId>
         <artifactId>js-scriptengine</artifactId>
