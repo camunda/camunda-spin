@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.camunda.spin</groupId>
     <artifactId>camunda-spin-root</artifactId>
-    <version>1.19.0-SNAPSHOT</version>
+    <version>1.19.0.jakarta-SNAPSHOT</version>
   </parent>
 
   <artifactId>camunda-spin-dataformat-xml-dom</artifactId>
@@ -55,13 +55,13 @@
       <artifactId>jruby-complete</artifactId>
       <scope>test</scope>
     </dependency>
-    
+
     <dependency>
       <groupId>org.graalvm.js</groupId>
       <artifactId>js</artifactId>
       <scope>test</scope>
     </dependency>
-    
+
     <dependency>
       <groupId>org.graalvm.js</groupId>
       <artifactId>js-scriptengine</artifactId>
@@ -73,7 +73,7 @@
       <artifactId>logback-classic</artifactId>
       <scope>test</scope>
     </dependency>
-    
+
     <dependency>
       <groupId>org.powermock</groupId>
       <artifactId>powermock-module-junit4</artifactId>
@@ -135,7 +135,7 @@
         </plugins>
       </build>
     </profile>
-    
+
     <profile>
       <id>jdk-15-and-onwards</id>
       <activation>
@@ -178,7 +178,7 @@
         </plugins>
       </build>
     </profile>
-    
+
     <!-- check for api differences between latest minor release -->
     <profile>
       <id>check-api-compatibility</id>

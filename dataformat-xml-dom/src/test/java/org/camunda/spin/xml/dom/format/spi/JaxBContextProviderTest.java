@@ -22,7 +22,7 @@ import java.io.StringWriter;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.xml.bind.JAXBException;
+import jakarta.xml.bind.JAXBException;
 
 import org.camunda.spin.DataFormats;
 import org.camunda.spin.Spin;
