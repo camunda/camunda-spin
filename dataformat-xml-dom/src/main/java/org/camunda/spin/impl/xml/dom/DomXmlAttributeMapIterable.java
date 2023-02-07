@@ -16,13 +16,12 @@
  */
 package org.camunda.spin.impl.xml.dom;
 
-import org.camunda.spin.impl.xml.dom.format.DomXmlDataFormat;
+import java.util.Iterator;
+import org.camunda.spin.impl.xml.dom.format.AbstractDomXmlDataFormat;
 import org.camunda.spin.xml.SpinXmlAttribute;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
-
-import java.util.Iterator;
 
 /**
  * @author Sebastian Menski
@@ -30,33 +29,36 @@ import java.util.Iterator;
 public class DomXmlAttributeMapIterable implements Iterable<SpinXmlAttribute> {
 
   protected final Element domElement;
-  protected final DomXmlDataFormat dataFormat;
+  protected final AbstractDomXmlDataFormat dataFormat;
   protected final String namespace;
   protected final boolean validating;
 
-  public DomXmlAttributeMapIterable(Element domElement, DomXmlDataFormat dataFormat) {
+  public DomXmlAttributeMapIterable(Element domElement, AbstractDomXmlDataFormat dataFormat) {
     this.domElement = domElement;
     this.dataFormat = dataFormat;
     this.namespace = null;
     validating = false;
   }
 
-  public DomXmlAttributeMapIterable(Element domElement, DomXmlDataFormat dataFormat, String namespace) {
+  public DomXmlAttributeMapIterable(Element domElement, AbstractDomXmlDataFormat dataFormat, String namespace) {
     this.domElement = domElement;
     this.dataFormat = dataFormat;
     this.namespace = namespace;
     validating = true;
   }
 
+  @Override
   public Iterator<SpinXmlAttribute> iterator() {
     return new DomXmlNodeIterator<SpinXmlAttribute>() {
 
       private NamedNodeMap attributes = domElement.getAttributes();
 
+      @Override
       protected int getLength() {
         return attributes.getLength();
       }
 
+      @Override
       protected SpinXmlAttribute getCurrent() {
         if (attributes != null) {
           Attr attribute = (Attr) attributes.item(index);

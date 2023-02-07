@@ -16,31 +16,36 @@
  */
 package org.camunda.spin.xml.dom;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
+import static org.camunda.spin.Spin.XML;
 import static org.camunda.spin.xml.XmlTestConstants.EXAMPLE_VALIDATION_XML;
-import static org.camunda.spin.xml.XmlTestConstants.createExampleOrder;
+import static org.camunda.spin.xml.XmlTestConstants.assertIsExampleOrder;
 
-import org.camunda.spin.impl.test.Script;
-import org.camunda.spin.impl.test.ScriptTest;
+import org.camunda.spin.xml.SpinXmlDataFormatException;
+import org.camunda.spin.xml.mapping.jakarta.Order;
 import org.junit.Test;
 
-public abstract class XmlDomMapJavaToXmlScriptTest extends ScriptTest{
+public class XmlDomMapXmlToJakartaTest {
 
   @Test
-  @Script(execute = false)
-  public void shouldMapJavaToXml() throws Throwable {
-    Object order = createExampleOrder();
-
-    script.setVariable("input", order);
-    script.execute();
-    String xml = script.getVariable("xml");
-
-    assertThat(xml).isXmlEqualTo(EXAMPLE_VALIDATION_XML);
+  public void shouldMapXmlObjectToJavaObject() {
+    Order order = XML(EXAMPLE_VALIDATION_XML).mapTo(Order.class);
+    assertIsExampleOrder(order);
   }
 
-  @Test(expected = IllegalArgumentException.class)
-  @Script(execute = false)
-  public void shouldFailWithNull() throws Throwable {
-    failingWithException();
+  @Test
+  public void shouldMapByCanonicalString() {
+    Order order = XML(EXAMPLE_VALIDATION_XML).mapTo(Order.class.getCanonicalName());
+    assertIsExampleOrder(order);
+  }
+
+  @Test
+  public void shouldFailForMalformedTypeString() {
+    try {
+      XML(EXAMPLE_VALIDATION_XML).mapTo("rubbish");
+      fail("Expected SpinXmlDataFormatException");
+    } catch (SpinXmlDataFormatException e) {
+      // happy path
+    }
   }
 }

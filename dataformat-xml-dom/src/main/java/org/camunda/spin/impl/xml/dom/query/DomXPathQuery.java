@@ -21,18 +21,16 @@ import static org.camunda.spin.impl.xml.dom.util.DomXmlEnsure.ensureXPathNotEmpt
 import static org.camunda.spin.impl.xml.dom.util.DomXmlEnsure.ensureXPathNotNull;
 
 import java.util.Map;
-
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
-
 import org.camunda.spin.SpinList;
 import org.camunda.spin.impl.SpinListImpl;
 import org.camunda.spin.impl.xml.dom.DomXmlAttributeIterable;
 import org.camunda.spin.impl.xml.dom.DomXmlElement;
 import org.camunda.spin.impl.xml.dom.DomXmlElementIterable;
 import org.camunda.spin.impl.xml.dom.DomXmlLogger;
-import org.camunda.spin.impl.xml.dom.format.DomXmlDataFormat;
+import org.camunda.spin.impl.xml.dom.format.AbstractDomXmlDataFormat;
 import org.camunda.spin.xml.SpinXPathQuery;
 import org.camunda.spin.xml.SpinXmlAttribute;
 import org.camunda.spin.xml.SpinXmlElement;
@@ -49,10 +47,10 @@ public class DomXPathQuery extends SpinXPathQuery {
   protected final DomXmlElement domElement;
   protected final XPath query;
   protected final String expression;
-  protected final DomXmlDataFormat dataFormat;
+  protected final AbstractDomXmlDataFormat dataFormat;
   protected DomXPathNamespaceResolver resolver;
 
-  public DomXPathQuery(DomXmlElement domElement, XPath query, String expression, DomXmlDataFormat dataFormat) {
+  public DomXPathQuery(DomXmlElement domElement, XPath query, String expression, AbstractDomXmlDataFormat dataFormat) {
     this.domElement = domElement;
     this.query = query;
     this.expression = expression;
@@ -62,6 +60,7 @@ public class DomXPathQuery extends SpinXPathQuery {
     this.query.setNamespaceContext(this.resolver);
   }
 
+  @Override
   public SpinXmlElement element() {
     try {
       ensureNotDocumentRootExpression(expression);
@@ -75,6 +74,7 @@ public class DomXPathQuery extends SpinXPathQuery {
     }
   }
 
+  @Override
   public SpinList<SpinXmlElement> elementList() {
     try {
       ensureNotDocumentRootExpression(expression);
@@ -88,6 +88,7 @@ public class DomXPathQuery extends SpinXPathQuery {
     }
   }
 
+  @Override
   public SpinXmlAttribute attribute() {
     try {
       ensureNotDocumentRootExpression(expression);
@@ -101,6 +102,7 @@ public class DomXPathQuery extends SpinXPathQuery {
     }
   }
 
+  @Override
   public SpinList<SpinXmlAttribute> attributeList() {
     try {
       ensureNotDocumentRootExpression(expression);
@@ -114,6 +116,7 @@ public class DomXPathQuery extends SpinXPathQuery {
     }
   }
 
+  @Override
   public String string() {
     try {
       ensureNotDocumentRootExpression(expression);
@@ -125,6 +128,7 @@ public class DomXPathQuery extends SpinXPathQuery {
     }
   }
 
+  @Override
   public Double number() {
     try {
       ensureNotDocumentRootExpression(expression);
@@ -136,6 +140,7 @@ public class DomXPathQuery extends SpinXPathQuery {
     }
   }
 
+  @Override
   public Boolean bool() {
     try {
       ensureNotDocumentRootExpression(expression);
@@ -147,12 +152,14 @@ public class DomXPathQuery extends SpinXPathQuery {
     }
   }
 
+  @Override
   public SpinXPathQuery ns(String prefix, String namespace) {
     resolver.setNamespace(prefix, namespace);
     query.setNamespaceContext(resolver);
     return this;
   }
 
+  @Override
   public SpinXPathQuery ns(Map<String, String> namespaces) {
     resolver.setNamespaces(namespaces);
     query.setNamespaceContext(resolver);

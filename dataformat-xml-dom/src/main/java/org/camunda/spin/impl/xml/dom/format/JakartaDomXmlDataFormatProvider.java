@@ -14,14 +14,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.javascript.xml.dom;
+package org.camunda.spin.impl.xml.dom.format;
 
-import org.camunda.spin.impl.test.ScriptEngine;
-import org.camunda.spin.xml.dom.XmlDomMapXmlToJavaScriptTest;
+import java.util.Map;
+import org.camunda.spin.DataFormats;
+import org.camunda.spin.spi.DataFormat;
+import org.camunda.spin.spi.DataFormatProvider;
 
 /**
- * @author Stefan Hentschel.
+ * Provides the {@link JakartaDomXmlDataFormat} with default configuration.
+ *
  */
-@ScriptEngine("graal.js")
-public class XmlDomMapXmlToJavaJavascriptTest extends XmlDomMapXmlToJavaScriptTest {
+public class JakartaDomXmlDataFormatProvider implements DataFormatProvider {
+
+  @Override
+  public String getDataFormatName() {
+    return DataFormats.XML_DATAFORMAT_NAME;
+  }
+
+  @Override
+  public DataFormat<?> createInstance() {
+    return new JakartaDomXmlDataFormat(DataFormats.XML_DATAFORMAT_NAME);
+  }
+
+  @Override
+  public DataFormat<?> createInstance(Map<String, Object> configurationProperties) {
+    return new JakartaDomXmlDataFormat(DataFormats.XML_DATAFORMAT_NAME, configurationProperties);
+  }
+
 }

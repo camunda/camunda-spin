@@ -25,14 +25,15 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
-
+import java.util.ServiceLoader;
 import javax.xml.XMLConstants;
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
-
 import org.camunda.spin.impl.util.SpinIoUtil;
+import org.camunda.spin.impl.xml.dom.format.JakartaDomXmlDataFormatProvider;
+import org.camunda.spin.spi.DataFormatProvider;
 import org.camunda.spin.xml.mapping.Customer;
 import org.camunda.spin.xml.mapping.Order;
 import org.camunda.spin.xml.mapping.OrderDetails;
@@ -90,7 +91,15 @@ public class XmlTestConstants {
     }
   }
 
-  public static void assertIsExampleOrder(Order order) {
+  public static void assertIsExampleOrder(Object order) {
+    if (order instanceof Order) {
+      assertIsExampleJavaxOrder((Order) order);
+    } else {
+      assertIsExampleJakartaOrder((org.camunda.spin.xml.mapping.jakarta.Order) order);
+    }
+  }
+
+  public static void assertIsExampleJavaxOrder(Order order) {
     SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
 
     assertThat(order.getOrder()).isEqualTo("order1");
@@ -111,7 +120,37 @@ public class XmlTestConstants {
         tuple("Johnny", 1286110922));
   }
 
-  public static Order createExampleOrder() {
+  public static void assertIsExampleJakartaOrder(org.camunda.spin.xml.mapping.jakarta.Order order) {
+    SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
+
+    assertThat(order.getOrder()).isEqualTo("order1");
+    try {
+      assertThat(order.getDueUntil()).isEqualTo(format.parse("20150112"));
+    } catch (ParseException e) {
+      //
+    }
+
+    List<org.camunda.spin.xml.mapping.jakarta.Customer> customers = order.getCustomer();
+    assertThat(customers).isNotNull();
+    assertThat(customers.size()).isEqualTo(3);
+
+    assertThat(customers).extracting("name", "contractStartDate")
+      .contains(
+        tuple("Kermit", 1354539722),
+        tuple("Waldo", 1320325322),
+        tuple("Johnny", 1286110922));
+  }
+
+  public static Object createExampleOrder() {
+    boolean isJavax = ServiceLoader.load(DataFormatProvider.class).stream()
+        .noneMatch(p -> JakartaDomXmlDataFormatProvider.class.equals(p.get().getClass()));
+    if (isJavax) {
+      return createExampleJavaxOrder();
+    }
+    return createExampleJakartaOrder();
+  }
+
+  protected static Order createExampleJavaxOrder() {
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
     SimpleDateFormat dateFormat2 = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -132,6 +171,55 @@ public class XmlTestConstants {
     Customer customer3 = new Customer();
 
     LinkedList<Customer> customers = new LinkedList<Customer>();
+    customers.add(customer1);
+    customers.add(customer2);
+    customers.add(customer3);
+
+    customer1.setId("customer1");
+    customer1.setName("Kermit");
+    customer1.setContractStartDate(1354539722);
+
+    customer2.setId("customer2");
+    customer2.setName("Waldo");
+    customer2.setContractStartDate(1320325322);
+
+    customer3.setId("customer3");
+    customer3.setName("Johnny");
+    customer3.setContractStartDate(1286110922);
+
+    details.setDate(detailsDate);
+    details.setId(1234567890L);
+    details.setProduct("camunda BPM");
+
+    order.setOrder("order1");
+    order.setDueUntil(dueUntilDate);
+    order.setOrderDetails(details);
+    order.setCustomer(customers);
+
+    return order;
+  }
+
+  public static org.camunda.spin.xml.mapping.jakarta.Order createExampleJakartaOrder() {
+    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
+    SimpleDateFormat dateFormat2 = new SimpleDateFormat("yyyy-MM-dd");
+
+    Date detailsDate = new Date();
+    Date dueUntilDate = new Date();
+
+    try {
+      detailsDate = dateFormat2.parse("2015-04-04");
+      dueUntilDate = dateFormat.parse("20150112");
+    } catch (ParseException e) {
+      // will fail if date is not set
+    }
+
+    org.camunda.spin.xml.mapping.jakarta.Order order = new org.camunda.spin.xml.mapping.jakarta.Order();
+    org.camunda.spin.xml.mapping.jakarta.OrderDetails details = new org.camunda.spin.xml.mapping.jakarta.OrderDetails();
+    org.camunda.spin.xml.mapping.jakarta.Customer customer1 = new org.camunda.spin.xml.mapping.jakarta.Customer();
+    org.camunda.spin.xml.mapping.jakarta.Customer customer2 = new org.camunda.spin.xml.mapping.jakarta.Customer();
+    org.camunda.spin.xml.mapping.jakarta.Customer customer3 = new org.camunda.spin.xml.mapping.jakarta.Customer();
+
+    LinkedList<org.camunda.spin.xml.mapping.jakarta.Customer> customers = new LinkedList<>();
     customers.add(customer1);
     customers.add(customer2);
     customers.add(customer3);

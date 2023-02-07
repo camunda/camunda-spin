@@ -19,10 +19,8 @@ package org.camunda.spin.impl.xml.dom.format;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.regex.Pattern;
-
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.ParserConfigurationException;
-
 import org.camunda.spin.impl.xml.dom.DomXmlLogger;
 import org.camunda.spin.spi.TextBasedDataFormatReader;
 import org.w3c.dom.Element;
@@ -38,12 +36,13 @@ public class DomXmlDataFormatReader extends TextBasedDataFormatReader {
   private static final DomXmlLogger LOG = DomXmlLogger.XML_DOM_LOGGER;
   private static final Pattern INPUT_MATCHING_PATTERN = Pattern.compile("\\A(\\s)*<");
 
-  protected DomXmlDataFormat dataFormat;
+  protected AbstractDomXmlDataFormat dataFormat;
 
-  public DomXmlDataFormatReader(DomXmlDataFormat dataFormat) {
+  public DomXmlDataFormatReader(AbstractDomXmlDataFormat dataFormat) {
     this.dataFormat = dataFormat;
   }
 
+  @Override
   public Element readInput(Reader input) {
 
     DocumentBuilder documentBuilder = getDocumentBuilder();
@@ -75,6 +74,7 @@ public class DomXmlDataFormatReader extends TextBasedDataFormatReader {
     }
   }
 
+  @Override
   protected Pattern getInputDetectionPattern() {
     return INPUT_MATCHING_PATTERN;
   }

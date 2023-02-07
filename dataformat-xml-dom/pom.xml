@@ -25,6 +25,12 @@
       <groupId>org.camunda.commons</groupId>
       <artifactId>camunda-commons-utils</artifactId>
     </dependency>
+    
+    <dependency>
+		  <groupId>jakarta.xml.bind</groupId>
+		  <artifactId>jakarta.xml.bind-api</artifactId>
+		  <scope>provided</scope>
+	  </dependency>
 
     <dependency>
       <groupId>junit</groupId>
@@ -92,6 +98,13 @@
       <type>test-jar</type>
       <scope>test</scope>
     </dependency>
+    
+    <dependency>
+      <groupId>org.glassfish.jaxb</groupId>
+      <artifactId>jaxb-runtime</artifactId>
+      <scope>test</scope>
+    </dependency>
+
   </dependencies>
 
   <profiles>
@@ -101,12 +114,13 @@
         <jdk>[9,)</jdk>
       </activation>
       <dependencies>
+		    <!-- bring along javax.xml.bind which was previously provided by the JDK -->
         <dependency>
-          <groupId>jakarta.xml.bind</groupId>
-          <artifactId>jakarta.xml.bind-api</artifactId>
+          <groupId>javax.xml.bind</groupId>
+          <artifactId>jaxb-api</artifactId>
           <scope>provided</scope>
         </dependency>
-
+        
         <dependency>
           <groupId>com.sun.xml.bind</groupId>
           <artifactId>jaxb-impl</artifactId>
@@ -114,7 +128,7 @@
         </dependency>
       </dependencies>
     </profile>
-
+    
     <profile>
       <id>disable-javascript-tests</id>
       <activation>
@@ -242,6 +256,88 @@
             <goals>
               <goal>manifest</goal>
             </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <version>3.0.0</version>
+        <executions>
+          <execution>
+            <id>javax-services</id>
+            <phase>process-resources</phase>
+            <goals><goal>run</goal></goals>
+            <configuration>
+              <target>
+                <copy todir="${basedir}/target/classes">
+                  <fileset dir="${basedir}/src/main/services/javax"/>
+                </copy>
+              </target>
+            </configuration>
+          </execution>
+          <execution>
+            <id>jakarta-services</id>
+            <phase>process-resources</phase>
+            <goals><goal>run</goal></goals>
+            <configuration>
+              <target>
+                <copy todir="${basedir}/target/classes-jakarta">
+                  <fileset dir="${basedir}/src/main/services/jakarta"/>
+                </copy>
+              </target>
+            </configuration>
+          </execution>
+          <execution>
+            <id>jakarta-classes</id>
+            <phase>process-classes</phase>
+            <goals><goal>run</goal></goals>
+            <configuration>
+              <target>
+                <copy todir="${basedir}/target/classes-jakarta">
+                  <fileset dir="${project.build.outputDirectory}"/>
+                </copy>
+              </target>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>jakarta</id>
+            <phase>package</phase>
+            <goals><goal>jar</goal></goals>
+            <configuration>
+              <classesDirectory>${project.basedir}/target/classes-jakarta</classesDirectory>
+              <classifier>jakarta</classifier>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>default-test</id>
+            <configuration>
+              <excludes>
+                <exclude>**/*Jakarta*Test</exclude>
+              </excludes>
+            </configuration>
+          </execution>
+          <execution>
+            <id>jakarta</id>
+            <phase>test</phase>
+            <goals><goal>test</goal></goals>
+            <configuration>
+              <classesDirectory>${project.basedir}/target/classes-jakarta</classesDirectory>
+              <excludes>
+                <exclude>**/*Javax*Test</exclude>
+              </excludes>
+            </configuration>
           </execution>
         </executions>
       </plugin>

@@ -16,15 +16,14 @@
  */
 package org.camunda.spin.impl.xml.dom;
 
-import org.camunda.spin.impl.xml.dom.format.DomXmlDataFormat;
+import static org.camunda.commons.utils.EnsureUtil.ensureNotNull;
+
+import java.util.Iterator;
+import org.camunda.spin.impl.xml.dom.format.AbstractDomXmlDataFormat;
 import org.camunda.spin.xml.SpinXmlElement;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-
-import java.util.Iterator;
-
-import static org.camunda.commons.utils.EnsureUtil.ensureNotNull;
 
 /**
  * @author Sebastian Menski
@@ -32,16 +31,16 @@ import static org.camunda.commons.utils.EnsureUtil.ensureNotNull;
 public class DomXmlElementIterable implements Iterable<SpinXmlElement> {
 
   protected final NodeList nodeList;
-  protected final DomXmlDataFormat dataFormat;
+  protected final AbstractDomXmlDataFormat dataFormat;
   protected final String namespace;
   protected final String name;
   protected boolean validating;
 
-  public DomXmlElementIterable(Element domElement, DomXmlDataFormat dataFormat) {
+  public DomXmlElementIterable(Element domElement, AbstractDomXmlDataFormat dataFormat) {
     this(domElement.getChildNodes(), dataFormat);
   }
 
-  public DomXmlElementIterable(NodeList nodeList, DomXmlDataFormat dataFormat) {
+  public DomXmlElementIterable(NodeList nodeList, AbstractDomXmlDataFormat dataFormat) {
     this.nodeList = nodeList;
     this.dataFormat = dataFormat;
     this.namespace = null;
@@ -49,11 +48,11 @@ public class DomXmlElementIterable implements Iterable<SpinXmlElement> {
     validating = false;
   }
 
-  public DomXmlElementIterable(Element domElement, DomXmlDataFormat dataFormat, String namespace, String name) {
+  public DomXmlElementIterable(Element domElement, AbstractDomXmlDataFormat dataFormat, String namespace, String name) {
     this(domElement.getChildNodes(), dataFormat, namespace, name);
   }
 
-  public DomXmlElementIterable(NodeList nodeList, DomXmlDataFormat dataFormat, String namespace, String name) {
+  public DomXmlElementIterable(NodeList nodeList, AbstractDomXmlDataFormat dataFormat, String namespace, String name) {
     ensureNotNull("name", name);
     this.nodeList = nodeList;
     this.dataFormat = dataFormat;
@@ -62,15 +61,18 @@ public class DomXmlElementIterable implements Iterable<SpinXmlElement> {
     validating = true;
   }
 
+  @Override
   public Iterator<SpinXmlElement> iterator() {
     return new DomXmlNodeIterator<SpinXmlElement>() {
 
       private NodeList childs = nodeList;
 
+      @Override
       protected int getLength() {
         return childs.getLength();
       }
 
+      @Override
       protected SpinXmlElement getCurrent() {
         if (childs != null) {
           Node item = childs.item(index);

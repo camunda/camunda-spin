@@ -19,66 +19,62 @@ package org.camunda.spin.impl.xml.dom.format;
 import java.util.Map;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.TransformerFactory;
-import org.camunda.spin.impl.xml.dom.format.spi.DefaultJaxBContextProvider;
-import org.camunda.spin.impl.xml.dom.format.spi.JaxBContextProvider;
+import org.camunda.spin.impl.xml.dom.format.spi.DefaultJakartaJaxBContextProvider;
+import org.camunda.spin.impl.xml.dom.format.spi.JakartaJaxBContextProvider;
 
-/**
- * @author Daniel Meyer
- *
- */
-public class DomXmlDataFormat extends AbstractDomXmlDataFormat {
+public class JakartaDomXmlDataFormat extends AbstractDomXmlDataFormat {
 
   /** the JaxBContextProvider instance used by this writer. */
-  protected JaxBContextProvider jaxBContextProvider;
+  protected JakartaJaxBContextProvider jaxBContextProvider;
 
-  protected DomXmlDataFormatMapper mapper;
+  protected JakartaDomXmlDataFormatMapper mapper;
 
-  public DomXmlDataFormat(String name) {
+  public JakartaDomXmlDataFormat(String name) {
     this(name, defaultDocumentBuilderFactory());
   }
 
-  public DomXmlDataFormat(String name, Map<String, Object> configurationProperties) {
+  public JakartaDomXmlDataFormat(String name, Map<String, Object> configurationProperties) {
     this(name, configurableDocumentBuilderFactory(configurationProperties));
   }
 
-  public DomXmlDataFormat(String name, JaxBContextProvider contextProvider) {
+  public JakartaDomXmlDataFormat(String name, JakartaJaxBContextProvider contextProvider) {
     this(name, defaultDocumentBuilderFactory(), contextProvider);
   }
 
-  public DomXmlDataFormat(String name,
+  public JakartaDomXmlDataFormat(String name,
                           DocumentBuilderFactory documentBuilderFactory,
-                          JaxBContextProvider contextProvider) {
+                          JakartaJaxBContextProvider contextProvider) {
     this(name, documentBuilderFactory, defaultTransformerFactory(), contextProvider);
   }
 
-  public DomXmlDataFormat(String name, DocumentBuilderFactory documentBuilderFactory) {
+  public JakartaDomXmlDataFormat(String name, DocumentBuilderFactory documentBuilderFactory) {
     this(name, documentBuilderFactory, defaultTransformerFactory(), defaultJaxBContextProvider());
   }
 
-  public DomXmlDataFormat(String name,
+  public JakartaDomXmlDataFormat(String name,
                           DocumentBuilderFactory documentBuilderFactory,
                           TransformerFactory transformerFactory,
-                          JaxBContextProvider contextProvider) {
+                          JakartaJaxBContextProvider contextProvider) {
     super(name, documentBuilderFactory, transformerFactory);
     this.jaxBContextProvider = contextProvider;
-    this.mapper = new DomXmlDataFormatMapper(this);
+    this.mapper = new JakartaDomXmlDataFormatMapper(this);
   }
 
   @Override
-  public DomXmlDataFormatMapper getMapper() {
+  public JakartaDomXmlDataFormatMapper getMapper() {
     return mapper;
   }
 
-  public JaxBContextProvider getJaxBContextProvider() {
+  public JakartaJaxBContextProvider getJaxBContextProvider() {
     return jaxBContextProvider;
   }
 
-  public void setJaxBContextProvider(JaxBContextProvider jaxBContextProvider) {
+  public void setJaxBContextProvider(JakartaJaxBContextProvider jaxBContextProvider) {
     this.jaxBContextProvider = jaxBContextProvider;
   }
 
-  public static JaxBContextProvider defaultJaxBContextProvider() {
-    return new DefaultJaxBContextProvider();
+  public static JakartaJaxBContextProvider defaultJaxBContextProvider() {
+    return new DefaultJakartaJaxBContextProvider();
   }
 
 }

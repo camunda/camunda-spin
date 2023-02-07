@@ -25,7 +25,7 @@ import org.camunda.spin.xml.SpinXmlDataFormatException;
 import org.camunda.spin.xml.mapping.Order;
 import org.junit.Test;
 
-public class XmlDomMapXmlToJavaTest {
+public class XmlDomMapXmlToJavaxTest {
 
   @Test
   public void shouldMapXmlObjectToJavaObject() {

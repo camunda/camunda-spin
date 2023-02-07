@@ -23,14 +23,13 @@ import static org.camunda.spin.xml.XmlTestConstants.EXAMPLE_VALIDATION_XML;
 import static org.camunda.spin.xml.XmlTestConstants.createExampleOrder;
 
 import org.camunda.spin.xml.mapping.NonXmlRootElementType;
-import org.camunda.spin.xml.mapping.Order;
 import org.junit.Test;
 
 public class XmlDomMapJavaToXmlTest {
 
   @Test
   public void shouldMapJavaToXml() {
-    Order order = createExampleOrder();
+    Object order = createExampleOrder();
     String orderAsString = XML(order).toString();
 
     assertThat(orderAsString).isXmlEqualTo(EXAMPLE_VALIDATION_XML);

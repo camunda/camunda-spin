@@ -23,7 +23,6 @@ import org.camunda.spin.impl.test.Script;
 import org.camunda.spin.impl.test.ScriptTest;
 import org.camunda.spin.impl.test.ScriptVariable;
 import org.camunda.spin.xml.SpinXmlDataFormatException;
-import org.camunda.spin.xml.mapping.Order;
 import org.junit.Test;
 
 /**
@@ -35,7 +34,7 @@ public abstract class XmlDomMapXmlToJavaScriptTest extends ScriptTest {
   @Script
   @ScriptVariable(name = "input", file = EXAMPLE_VALIDATION_XML_FILE_NAME)
   public void shouldMapXmlToJava() {
-    Order order = script.getVariable("order");
+    Object order = script.getVariable("order");
     assertIsExampleOrder(order);
   }
 

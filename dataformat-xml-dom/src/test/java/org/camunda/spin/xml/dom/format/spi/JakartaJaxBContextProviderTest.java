@@ -18,26 +18,20 @@ package org.camunda.spin.xml.dom.format.spi;
 
 import static org.assertj.core.api.Fail.fail;
 
+import jakarta.xml.bind.JAXBException;
 import java.io.StringWriter;
 import java.util.HashSet;
 import java.util.Set;
-
-import javax.xml.bind.JAXBException;
-
 import org.camunda.spin.DataFormats;
 import org.camunda.spin.Spin;
-import org.camunda.spin.impl.xml.dom.format.DomXmlDataFormat;
+import org.camunda.spin.impl.xml.dom.format.JakartaDomXmlDataFormat;
 import org.camunda.spin.xml.SpinXmlDataFormatException;
 import org.camunda.spin.xml.SpinXmlElement;
-import org.camunda.spin.xml.mapping.Customer;
+import org.camunda.spin.xml.mapping.jakarta.Customer;
 import org.junit.After;
 import org.junit.Test;
 
-/**
- * @author Thorben Lindhauer
- *
- */
-public class JaxBContextProviderTest {
+public class JakartaJaxBContextProviderTest {
 
   /**
    * This test uses a dataformat with a JAXBContext that cannot resolve any classes.
@@ -53,7 +47,7 @@ public class JaxBContextProviderTest {
     spinWrapper.writeToWriter(new StringWriter());
 
     // using the custom jaxb context provider should fail with a JAXBException
-    ((DomXmlDataFormat) DataFormats.xml()).setJaxBContextProvider(new EmptyContextProvider());
+    ((JakartaDomXmlDataFormat) DataFormats.xml()).setJaxBContextProvider(new JakartaEmptyContextProvider());
     try {
       spinWrapper = Spin.XML(objectToConvert);
       spinWrapper.writeToWriter(new StringWriter());
@@ -78,6 +72,6 @@ public class JaxBContextProviderTest {
   @After
   public void tearDown() {
     // reset jaxb context provider
-    ((DomXmlDataFormat) DataFormats.xml()).setJaxBContextProvider(DomXmlDataFormat.defaultJaxBContextProvider());
+    ((JakartaDomXmlDataFormat) DataFormats.xml()).setJaxBContextProvider(JakartaDomXmlDataFormat.defaultJaxBContextProvider());
   }
 }

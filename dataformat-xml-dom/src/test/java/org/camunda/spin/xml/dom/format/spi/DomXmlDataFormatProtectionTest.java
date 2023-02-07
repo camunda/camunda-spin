@@ -20,9 +20,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
-
 import org.camunda.spin.DataFormats;
-import org.camunda.spin.impl.xml.dom.format.DomXmlDataFormat;
+import org.camunda.spin.impl.xml.dom.format.AbstractDomXmlDataFormat;
 import org.camunda.spin.xml.JdkUtil;
 import org.camunda.spin.xml.SpinXmlDataFormatException;
 import org.junit.Assume;
@@ -31,11 +30,11 @@ import org.junit.Test;
 
 public class DomXmlDataFormatProtectionTest {
 
-  protected static DomXmlDataFormat format;
+  protected static AbstractDomXmlDataFormat format;
 
   @BeforeClass
   public static void setUpMocks() {
-    format = (DomXmlDataFormat) DataFormats.xml();
+    format = (AbstractDomXmlDataFormat) DataFormats.xml();
   }
 
   @Test

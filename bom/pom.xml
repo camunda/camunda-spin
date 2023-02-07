@@ -48,6 +48,13 @@
         <artifactId>camunda-spin-dataformat-xml-dom</artifactId>
         <version>${project.version}</version>
       </dependency>
+
+      <dependency>
+        <groupId>org.camunda.spin</groupId>
+        <artifactId>camunda-spin-dataformat-xml-dom</artifactId>
+        <classifier>jakarta</classifier>
+        <version>${project.version}</version>
+      </dependency>
     </dependencies>
   </dependencyManagement>
 

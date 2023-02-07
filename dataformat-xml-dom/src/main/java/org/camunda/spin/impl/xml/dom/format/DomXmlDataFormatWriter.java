@@ -45,14 +45,15 @@ public class DomXmlDataFormatWriter implements DataFormatWriter {
 
   protected static final String STRIP_SPACE_XSL = "org/camunda/spin/impl/xml/dom/format/strip-space.xsl";
 
-  protected DomXmlDataFormat domXmlDataFormat;
+  protected AbstractDomXmlDataFormat domXmlDataFormat;
   protected Templates formattingTemplates;
 
-  public DomXmlDataFormatWriter(DomXmlDataFormat domXmlDataFormat) {
+  public DomXmlDataFormatWriter(AbstractDomXmlDataFormat domXmlDataFormat) {
     this.domXmlDataFormat = domXmlDataFormat;
     this.formattingTemplates = reloadFormattingTemplates();
   }
 
+  @Override
   public void writeToWriter(Writer writer, Object input) {
     writeResult(new StreamResult(writer), input);
   }

@@ -16,8 +16,8 @@
  */
 package org.camunda.spin.impl.xml.dom.format.spi;
 
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
+import jakarta.xml.bind.Marshaller;
+import jakarta.xml.bind.Unmarshaller;
 import org.camunda.spin.impl.xml.dom.format.DomXmlDataFormat;
 
 /**
@@ -28,7 +28,7 @@ import org.camunda.spin.impl.xml.dom.format.DomXmlDataFormat;
  * it. Different applications may require different caching strategies.
  *
  */
-public interface JaxBContextProvider {
+public interface JakartaJaxBContextProvider {
 
   /**
    * Obtain a Marshaller that can map the provided types.
