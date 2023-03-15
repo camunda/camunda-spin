@@ -39,8 +39,6 @@
     <spin.version.old>1.18.0</spin.version.old>
     <xml.bind-api.version>2.3.3</xml.bind-api.version>
 
-    <plugin.version.javadoc>3.3.1</plugin.version.javadoc>
-
     <license.includeTransitiveDependencies>false</license.includeTransitiveDependencies>
     <additionalparam>-Xdoclint:none</additionalparam>
   </properties>
