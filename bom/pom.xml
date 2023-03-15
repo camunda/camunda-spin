@@ -77,25 +77,6 @@
     </pluginManagement>
   </build>
 
-  <profiles>
-    <profile>
-      <id>sonatype-oss-release</id>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-javadoc-plugin</artifactId>
-            <version>${plugin.version.javadoc}</version>
-            <configuration combine.children="append">
-              <doclint>none</doclint>
-              <detectJavaApiLink>false</detectJavaApiLink>
-            </configuration>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-  </profiles>
-
   <scm>
     <url>https://github.com/camunda/camunda-spin</url>
     <connection>scm:git:git@github.com:camunda/camunda-spin.git</connection>
