@@ -38,12 +38,14 @@ import org.junit.Test;
 public class DomXmlDataFormatWriterTest {
 
   private final String newLine = System.getProperty("line.separator");
-  private final String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><order><product>Milk</product><product>Coffee</product></order>";
+  private final String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><order><product>  Milk </product><product>Coffee</product><product xml:space=\"preserve\">   </product><product>   </product></order>";
 
 
   private final String formattedXmlIbmJDK = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><order>" + newLine
-      + "  <product>Milk</product>" + newLine
+      + "  <product>  Milk </product>" + newLine
       + "  <product>Coffee</product>" + newLine
+      + "  <product xml:space=\"preserve\">   </product>" + newLine
+      + "  <product/>" + newLine
       + "</order>";
 
   private final String formattedXml = formattedXmlIbmJDK + newLine;
@@ -167,14 +169,16 @@ public class DomXmlDataFormatWriterTest {
 
     // given
     String expectedXml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><order>" + newLine
-        + "  <product>Milk</product>" + newLine
+        + "  <product>  Milk </product>" + newLine
         + "  <product>Coffee</product>" + newLine
+        + "  <product xml:space=\"preserve\">   </product>" + newLine
+        + "  <product>   </product>" + newLine
         + "</order>";
 
     DataFormat<SpinXmlElement> dataFormat = new DomXmlDataFormat(DataFormats.XML_DATAFORMAT_NAME);
     ((DomXmlDataFormat) dataFormat).setPrettyPrint(false);
 
-    SpinXmlElement spinXml = SpinFactory.INSTANCE.createSpin(formattedXml, dataFormat);
+    SpinXmlElement spinXml = SpinFactory.INSTANCE.createSpin(expectedXml, dataFormat);
 
     // when
     byte[] serializedValue = serializeValue(spinXml);
