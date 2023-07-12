@@ -23,7 +23,7 @@
   </modules>
 
   <properties>
-    <jackson.version>2.12.1</jackson.version>
+    <jackson.version>2.15.2</jackson.version>
     <jackson.version.databind>${jackson.version}</jackson.version.databind>
     <commons.version>1.8.2</commons.version>
     <spin.version.old>1.7.6</spin.version.old>
