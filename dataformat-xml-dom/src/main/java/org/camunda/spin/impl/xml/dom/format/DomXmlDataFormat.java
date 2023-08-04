@@ -16,6 +16,7 @@
  */
 package org.camunda.spin.impl.xml.dom.format;
 
+import java.util.Optional;
 import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -37,7 +38,6 @@ import org.w3c.dom.Element;
 
 /**
  * @author Daniel Meyer
- *
  */
 public class DomXmlDataFormat implements DataFormat<SpinXmlElement> {
 
@@ -54,13 +54,19 @@ public class DomXmlDataFormat implements DataFormat<SpinXmlElement> {
   public static final String XXE_PROPERTY = "xxe-processing";
   public static final String SP_PROPERTY = "secure-processing";
 
-  /** the DocumentBuilderFactory used by the reader */
+  /**
+   * the DocumentBuilderFactory used by the reader
+   */
   protected DocumentBuilderFactory documentBuilderFactory;
 
-  /** the TransformerFactory instance used by the writer */
+  /**
+   * the TransformerFactory instance used by the writer
+   */
   protected TransformerFactory transformerFactory;
 
-  /** the JaxBContextProvider instance used by this writer. */
+  /**
+   * the JaxBContextProvider instance used by this writer.
+   */
   protected JaxBContextProvider jaxBContextProvider;
 
   protected DomXmlDataFormatReader reader;
@@ -70,6 +76,8 @@ public class DomXmlDataFormat implements DataFormat<SpinXmlElement> {
   protected final String name;
 
   protected boolean prettyPrint;
+
+  protected Optional<byte[]> xslt;
 
   public DomXmlDataFormat(String name) {
     this(name, defaultDocumentBuilderFactory());
@@ -100,6 +108,7 @@ public class DomXmlDataFormat implements DataFormat<SpinXmlElement> {
     this.name = name;
     this.documentBuilderFactory = documentBuilderFactory;
     this.prettyPrint = true;
+    this.xslt = Optional.empty();
 
     LOG.usingDocumentBuilderFactory(documentBuilderFactory.getClass().getName());
 
@@ -180,6 +189,16 @@ public class DomXmlDataFormat implements DataFormat<SpinXmlElement> {
     this.prettyPrint = prettyPrint;
   }
 
+  public Optional<byte[]> getXslt() {
+    return this.xslt;
+  }
+
+  public void setXslt(final Optional<byte[]> xslt) {
+    this.xslt = xslt;
+    //writer must create again
+    this.writer = new DomXmlDataFormatWriter(this);
+  }
+
   public static TransformerFactory defaultTransformerFactory() {
     return TransformerFactory.newInstance();
   }
@@ -188,8 +207,7 @@ public class DomXmlDataFormat implements DataFormat<SpinXmlElement> {
     return configurableDocumentBuilderFactory(Collections.emptyMap());
   }
 
-  public static DocumentBuilderFactory configurableDocumentBuilderFactory(
-      Map<String,Object> configurationProperties) {
+  public static DocumentBuilderFactory configurableDocumentBuilderFactory(Map<String, Object> configurationProperties) {
 
     DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
 

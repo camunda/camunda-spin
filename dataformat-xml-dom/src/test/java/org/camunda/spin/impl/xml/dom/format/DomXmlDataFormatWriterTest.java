@@ -22,9 +22,11 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
+import java.util.Optional;
 import org.camunda.spin.DataFormats;
 import org.camunda.spin.SpinFactory;
 import org.camunda.spin.spi.DataFormat;
@@ -38,15 +40,16 @@ import org.junit.Test;
 public class DomXmlDataFormatWriterTest {
 
   private final String newLine = System.getProperty("line.separator");
-  private final String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><order><product>Milk</product><product>Coffee</product></order>";
+  private final String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><order><product>Milk</product><product>Coffee</product><product> </product></order>";
 
+  private final String formattedXml =
+      "<?xml version=\"1.0\" encoding=\"UTF-8\"?><order>" + this.newLine + "  <product>Milk</product>" + this.newLine
+          + "  <product>Coffee</product>" + this.newLine + "  <product/>" + this.newLine + "</order>" + this.newLine;
 
-  private final String formattedXmlIbmJDK = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><order>" + newLine
-      + "  <product>Milk</product>" + newLine
-      + "  <product>Coffee</product>" + newLine
-      + "</order>";
-
-  private final String formattedXml = formattedXmlIbmJDK + newLine;
+  private final String formattedXmlWithWhitespaceInProduct =
+      "<?xml version=\"1.0\" encoding=\"UTF-8\"?><order>" + this.newLine + "  <product>Milk</product>" + this.newLine
+          + "  <product>Coffee</product>" + this.newLine + "  <product> </product>" + this.newLine + "</order>"
+          + this.newLine;
 
 
   // this is what execution.setVariable("test", spinXml); does
@@ -166,15 +169,14 @@ public class DomXmlDataFormatWriterTest {
   public void testDisabledPrettyPrintFormatted() throws Exception {
 
     // given
-    String expectedXml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><order>" + newLine
-        + "  <product>Milk</product>" + newLine
-        + "  <product>Coffee</product>" + newLine
-        + "</order>";
+    String expectedXml =
+        "<?xml version=\"1.0\" encoding=\"UTF-8\"?><order>" + newLine + "  <product>Milk</product>" + newLine
+            + "  <product>Coffee</product>" + newLine + "  <product> </product>" + this.newLine + "</order>";
 
     DataFormat<SpinXmlElement> dataFormat = new DomXmlDataFormat(DataFormats.XML_DATAFORMAT_NAME);
     ((DomXmlDataFormat) dataFormat).setPrettyPrint(false);
 
-    SpinXmlElement spinXml = SpinFactory.INSTANCE.createSpin(formattedXml, dataFormat);
+    SpinXmlElement spinXml = SpinFactory.INSTANCE.createSpin(formattedXmlWithWhitespaceInProduct, dataFormat);
 
     // when
     byte[] serializedValue = serializeValue(spinXml);
@@ -189,5 +191,38 @@ public class DomXmlDataFormatWriterTest {
 
     // then
     assertThat(spinXmlElement.toString()).isEqualTo(expectedXml);
+  }
+
+  /**
+   * new feature provided by SUPPORT-16910 - custom strip-space.xsl for preserve-space.
+   */
+  @Test
+  public void testCustomStripSpaceXSL() throws Exception {
+    final DataFormat<SpinXmlElement> dataFormat = new DomXmlDataFormat(DataFormats.XML_DATAFORMAT_NAME);
+
+    try (final InputStream inputStream = DomXmlDataFormatWriterTest.class.getClassLoader()
+        .getResourceAsStream("org/camunda/spin/strip-space-preserve-space.xsl")) {
+      final byte[] targetArray = new byte[inputStream.available()];
+
+      inputStream.read(targetArray);
+
+      ((DomXmlDataFormat) dataFormat).setXslt(Optional.of(targetArray));
+    }
+
+    final SpinXmlElement spinXml = SpinFactory.INSTANCE.createSpin(this.xml, dataFormat);
+
+    // when
+    final byte[] serializedValue = serializeValue(spinXml);
+
+    // then
+    // assert that xml has not been formatted
+    assertThat(new String(serializedValue, "UTF-8")).isEqualTo(this.formattedXmlWithWhitespaceInProduct);
+
+    // when
+    // this is what execution.getVariable("test"); does
+    final SpinXmlElement spinXmlElement = deserializeValue(serializedValue, dataFormat);
+
+    // then
+    assertThat(spinXmlElement.toString()).isEqualTo(this.formattedXmlWithWhitespaceInProduct);
   }
 }

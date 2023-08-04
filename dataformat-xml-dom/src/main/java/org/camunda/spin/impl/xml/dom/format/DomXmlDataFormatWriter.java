@@ -16,9 +16,11 @@
  */
 package org.camunda.spin.impl.xml.dom.format;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Writer;
+import java.util.Optional;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Source;
 import javax.xml.transform.Templates;
@@ -71,27 +73,36 @@ public class DomXmlDataFormatWriter implements DataFormatWriter {
     }
   }
 
-
   /**
-   * Return a {@link Templates} instance for the strip-spaces.xsl stylesheet.
+   * Return a {@link Templates} instance for the strip-spaces.xsl stylesheet, which can be configured in the {@link DomXmlDataFormat}, otherwise the default file will be use.
    * Uses the configured {@link TransformerFactory} from the {@link DomXmlDataFormat}.
    *
    * @return the templates instance for strip-spaces.xsl.
    */
   protected Templates reloadFormattingTemplates() {
-    TransformerFactory transformerFactory = domXmlDataFormat.getTransformerFactory();
+    final TransformerFactory transformerFactory = this.domXmlDataFormat.getTransformerFactory();
 
-    try (InputStream xslIn =
-        DomXmlDataFormatWriter.class.getClassLoader().getResourceAsStream(STRIP_SPACE_XSL)) {
+    try (final InputStream xslIn = getStripSpaceXsl()) {
       if (xslIn == null) {
         throw LOG.unableToFindStripSpaceXsl(STRIP_SPACE_XSL);
       }
 
-      Source xslt = new StreamSource(xslIn);
-      Templates newTemplates = transformerFactory.newTemplates(xslt);
+      final Source xslt = new StreamSource(xslIn);
+
+      final Templates newTemplates = transformerFactory.newTemplates(xslt);
       return newTemplates;
-    } catch (IOException | TransformerConfigurationException ex) {
+    } catch (final IOException | TransformerConfigurationException ex) {
       throw LOG.unableToLoadFormattingTemplates(ex);
+    }
+  }
+
+  private InputStream getStripSpaceXsl() {
+    final Optional<byte[]> importedXslt = this.domXmlDataFormat.getXslt();
+    if (importedXslt.isPresent()) {
+      return new ByteArrayInputStream(importedXslt.get());
+    } else {
+      //default strip-spaces.xsl
+      return DomXmlDataFormatWriter.class.getClassLoader().getResourceAsStream(STRIP_SPACE_XSL);
     }
   }
 
