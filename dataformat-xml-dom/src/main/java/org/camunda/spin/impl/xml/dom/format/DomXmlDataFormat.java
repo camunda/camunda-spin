@@ -77,7 +77,7 @@ public class DomXmlDataFormat implements DataFormat<SpinXmlElement> {
 
   protected boolean prettyPrint;
 
-  protected Optional<byte[]> xslt;
+  protected byte[] xslt;
 
   public DomXmlDataFormat(String name) {
     this(name, defaultDocumentBuilderFactory());
@@ -108,7 +108,7 @@ public class DomXmlDataFormat implements DataFormat<SpinXmlElement> {
     this.name = name;
     this.documentBuilderFactory = documentBuilderFactory;
     this.prettyPrint = true;
-    this.xslt = Optional.empty();
+    this.xslt = null;
 
     LOG.usingDocumentBuilderFactory(documentBuilderFactory.getClass().getName());
 
@@ -189,14 +189,14 @@ public class DomXmlDataFormat implements DataFormat<SpinXmlElement> {
     this.prettyPrint = prettyPrint;
   }
 
-  public Optional<byte[]> getXslt() {
+  public byte[] getXslt() {
     return this.xslt;
   }
 
-  public void setXslt(final Optional<byte[]> xslt) {
+  public void setXslt(byte[] xslt) {
     this.xslt = xslt;
-    //writer must create again
-    this.writer = new DomXmlDataFormatWriter(this);
+    //writer need a new formattingTemplate with the new xslt
+    this.writer.setFormattingTemplates(this.writer.reloadFormattingTemplates());
   }
 
   public static TransformerFactory defaultTransformerFactory() {

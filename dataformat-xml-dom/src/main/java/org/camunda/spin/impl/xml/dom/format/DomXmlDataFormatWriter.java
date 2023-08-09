@@ -20,7 +20,6 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Writer;
-import java.util.Optional;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Source;
 import javax.xml.transform.Templates;
@@ -96,10 +95,18 @@ public class DomXmlDataFormatWriter implements DataFormatWriter {
     }
   }
 
+  /**
+   * Set the {@link Templates} which used for creating the transformer.
+   * @param formattingTemplates
+   */
+  protected void setFormattingTemplates(Templates formattingTemplates) {
+    this.formattingTemplates = formattingTemplates;
+  }
+
   private InputStream getStripSpaceXsl() {
-    final Optional<byte[]> importedXslt = this.domXmlDataFormat.getXslt();
-    if (importedXslt.isPresent()) {
-      return new ByteArrayInputStream(importedXslt.get());
+    final byte[] importedXslt = this.domXmlDataFormat.getXslt();
+    if (importedXslt != null) {
+      return new ByteArrayInputStream(importedXslt);
     } else {
       //default strip-spaces.xsl
       return DomXmlDataFormatWriter.class.getClassLoader().getResourceAsStream(STRIP_SPACE_XSL);

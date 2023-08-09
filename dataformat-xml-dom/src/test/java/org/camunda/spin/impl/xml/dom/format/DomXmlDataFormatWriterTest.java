@@ -206,7 +206,7 @@ public class DomXmlDataFormatWriterTest {
 
       inputStream.read(targetArray);
 
-      ((DomXmlDataFormat) dataFormat).setXslt(Optional.of(targetArray));
+      ((DomXmlDataFormat) dataFormat).setXslt(targetArray);
     }
 
     final SpinXmlElement spinXml = SpinFactory.INSTANCE.createSpin(this.xml, dataFormat);
