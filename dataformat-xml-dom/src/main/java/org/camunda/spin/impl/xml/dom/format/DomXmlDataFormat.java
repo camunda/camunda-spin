@@ -16,6 +16,7 @@
  */
 package org.camunda.spin.impl.xml.dom.format;
 
+import java.io.InputStream;
 import java.util.Optional;
 import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -77,7 +78,7 @@ public class DomXmlDataFormat implements DataFormat<SpinXmlElement> {
 
   protected boolean prettyPrint;
 
-  protected byte[] xslt;
+  protected InputStream xslt;
 
   public DomXmlDataFormat(String name) {
     this(name, defaultDocumentBuilderFactory());
@@ -189,11 +190,11 @@ public class DomXmlDataFormat implements DataFormat<SpinXmlElement> {
     this.prettyPrint = prettyPrint;
   }
 
-  public byte[] getXslt() {
+  public InputStream getXslt() {
     return this.xslt;
   }
 
-  public void setXslt(byte[] xslt) {
+  public void setXslt(InputStream xslt) {
     this.xslt = xslt;
     //writer need a new formattingTemplate with the new xslt
     this.writer.setFormattingTemplates(this.writer.reloadFormattingTemplates());

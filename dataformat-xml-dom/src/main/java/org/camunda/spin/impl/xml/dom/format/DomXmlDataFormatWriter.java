@@ -104,9 +104,9 @@ public class DomXmlDataFormatWriter implements DataFormatWriter {
   }
 
   private InputStream getStripSpaceXsl() {
-    final byte[] importedXslt = this.domXmlDataFormat.getXslt();
+    final InputStream importedXslt = this.domXmlDataFormat.getXslt();
     if (importedXslt != null) {
-      return new ByteArrayInputStream(importedXslt);
+      return importedXslt;
     } else {
       //default strip-spaces.xsl
       return DomXmlDataFormatWriter.class.getClassLoader().getResourceAsStream(STRIP_SPACE_XSL);

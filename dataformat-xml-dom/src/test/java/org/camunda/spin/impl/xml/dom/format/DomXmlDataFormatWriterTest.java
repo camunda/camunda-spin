@@ -17,6 +17,7 @@
 package org.camunda.spin.impl.xml.dom.format;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.in;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -202,11 +203,7 @@ public class DomXmlDataFormatWriterTest {
 
     try (final InputStream inputStream = DomXmlDataFormatWriterTest.class.getClassLoader()
         .getResourceAsStream("org/camunda/spin/strip-space-preserve-space.xsl")) {
-      final byte[] targetArray = new byte[inputStream.available()];
-
-      inputStream.read(targetArray);
-
-      ((DomXmlDataFormat) dataFormat).setXslt(targetArray);
+      ((DomXmlDataFormat) dataFormat).setXslt(inputStream);
     }
 
     final SpinXmlElement spinXml = SpinFactory.INSTANCE.createSpin(this.xml, dataFormat);
