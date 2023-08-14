@@ -17,15 +17,12 @@
 package org.camunda.spin.impl.xml.dom.format;
 
 import java.io.InputStream;
-import java.util.Optional;
+import java.util.Collections;
+import java.util.Map;
 import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerFactory;
-
-import java.util.Collections;
-import java.util.Map;
-
 import org.camunda.spin.impl.xml.dom.DomXmlAttribute;
 import org.camunda.spin.impl.xml.dom.DomXmlElement;
 import org.camunda.spin.impl.xml.dom.DomXmlLogger;
@@ -78,7 +75,7 @@ public class DomXmlDataFormat implements DataFormat<SpinXmlElement> {
 
   protected boolean prettyPrint;
 
-  protected InputStream xslt;
+  protected InputStream formattingConfiguration;
 
   public DomXmlDataFormat(String name) {
     this(name, defaultDocumentBuilderFactory());
@@ -109,7 +106,7 @@ public class DomXmlDataFormat implements DataFormat<SpinXmlElement> {
     this.name = name;
     this.documentBuilderFactory = documentBuilderFactory;
     this.prettyPrint = true;
-    this.xslt = null;
+    this.formattingConfiguration = null;
 
     LOG.usingDocumentBuilderFactory(documentBuilderFactory.getClass().getName());
 
@@ -125,14 +122,17 @@ public class DomXmlDataFormat implements DataFormat<SpinXmlElement> {
     this.mapper = new DomXmlDataFormatMapper(this);
   }
 
+  @Override
   public Class<? extends SpinXmlElement> getWrapperType() {
     return DomXmlElement.class;
   }
 
+  @Override
   public SpinXmlElement createWrapperInstance(Object parameter) {
     return createElementWrapper((Element) parameter);
   }
 
+  @Override
   public String getName() {
     return name;
   }
@@ -145,14 +145,17 @@ public class DomXmlDataFormat implements DataFormat<SpinXmlElement> {
     return new DomXmlAttribute(attr, this);
   }
 
+  @Override
   public DomXmlDataFormatReader getReader() {
     return reader;
   }
 
+  @Override
   public DomXmlDataFormatWriter getWriter() {
     return writer;
   }
 
+  @Override
   public DomXmlDataFormatMapper getMapper() {
     return mapper;
   }
@@ -190,13 +193,13 @@ public class DomXmlDataFormat implements DataFormat<SpinXmlElement> {
     this.prettyPrint = prettyPrint;
   }
 
-  public InputStream getXslt() {
-    return this.xslt;
+  public InputStream getFormattingConfiguration() {
+    return this.formattingConfiguration;
   }
 
-  public void setXslt(InputStream xslt) {
-    this.xslt = xslt;
-    //writer need a new formattingTemplate with the new xslt
+  public void setFormattingConfiguration(InputStream formattingConfiguration) {
+    this.formattingConfiguration = formattingConfiguration;
+    //writer need a new formattingTemplate with the new formattingConfiguration
     this.writer.setFormattingTemplates(this.writer.reloadFormattingTemplates());
   }
 
