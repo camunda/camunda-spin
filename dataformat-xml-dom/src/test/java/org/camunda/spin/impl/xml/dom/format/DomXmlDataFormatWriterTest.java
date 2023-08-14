@@ -41,17 +41,21 @@ public class DomXmlDataFormatWriterTest {
   private final String newLine = System.getProperty("line.separator");
   private final String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><order><product>Milk</product><product>Coffee</product><product> </product></order>";
 
-  private final String formattedXmlIbmJDK =
-      "<?xml version=\"1.0\" encoding=\"UTF-8\"?><order>" + this.newLine + "  <product>Milk</product>" + this.newLine
-          + "  <product>Coffee</product>" + this.newLine + "  <product/>" + this.newLine + "</order>";
+  private final String formattedXmlIbmJDK = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><order>" + newLine
+      + "  <product>Milk</product>" + newLine
+      + "  <product>Coffee</product>" + newLine
+      + "  <product/>" + newLine
+      + "</order>";
 
-  private final String formattedXml = formattedXmlIbmJDK + this.newLine;
+  private final String formattedXml = formattedXmlIbmJDK + newLine;
 
-  private final String formattedXmlWithWhitespaceInProductIbmJDK =
-      "<?xml version=\"1.0\" encoding=\"UTF-8\"?><order>" + this.newLine + "  <product>Milk</product>" + this.newLine
-          + "  <product>Coffee</product>" + this.newLine + "  <product> </product>" + this.newLine + "</order>";
+  private final String formattedXmlWithWhitespaceInProductIbmJDK = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><order>" + newLine
+      + "  <product>Milk</product>" + newLine
+      + "  <product>Coffee</product>" + newLine
+      + "  <product> </product>" + newLine
+      + "</order>";
 
-  private final String formattedXmlWithWhitespaceInProduct = formattedXmlWithWhitespaceInProductIbmJDK + this.newLine;
+  private final String formattedXmlWithWhitespaceInProduct = formattedXmlWithWhitespaceInProductIbmJDK + newLine;
 
 
   // this is what execution.setVariable("test", spinXml); does
@@ -175,9 +179,11 @@ public class DomXmlDataFormatWriterTest {
   public void testDisabledPrettyPrintFormatted() throws Exception {
 
     // given
-    String expectedXml =
-        "<?xml version=\"1.0\" encoding=\"UTF-8\"?><order>" + newLine + "  <product>Milk</product>" + newLine
-            + "  <product>Coffee</product>" + newLine + "  <product> </product>" + this.newLine + "</order>";
+    String expectedXml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><order>" + newLine
+        + "  <product>Milk</product>" + newLine
+        + "  <product>Coffee</product>" + newLine
+        + "  <product> </product>" + newLine
+        + "</order>";
 
     DataFormat<SpinXmlElement> dataFormat = new DomXmlDataFormat(DataFormats.XML_DATAFORMAT_NAME);
     ((DomXmlDataFormat) dataFormat).setPrettyPrint(false);
@@ -200,7 +206,8 @@ public class DomXmlDataFormatWriterTest {
   }
 
   /**
-   * new feature provided by SUPPORT-16910 - custom strip-space.xsl for preserve-space.
+   * new feature provided by https://github.com/camunda/camunda-bpm-platform/issues/3633: custom formatting
+   * configuration to preserve-space.
    */
   @Test
   public void testCustomStripSpaceXSL() throws Exception {
@@ -218,7 +225,7 @@ public class DomXmlDataFormatWriterTest {
 
     // then
     // assert that xml has not been formatted
-    assertThat(new String(serializedValue, "UTF-8")).isEqualTo(this.formattedXmlWithWhitespaceInProduct);
+    assertThat(new String(serializedValue, "UTF-8")).isEqualTo(getExpectedFormattedXML(true));
 
     // when
     // this is what execution.getVariable("test"); does
