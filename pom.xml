@@ -26,7 +26,7 @@
     <assertj.version>2.9.1</assertj.version>
     <commons.version>1.12.0</commons.version>
     <graal.js.version>21.1.0</graal.js.version>
-    <groovy.version>2.5.22</groovy.version>
+    <groovy.version>3.0.18</groovy.version>
     <jackson.version>2.15.2</jackson.version>
     <jaxb-impl.version>2.3.6</jaxb-impl.version>
     <jruby.version>9.1.17.0</jruby.version>
