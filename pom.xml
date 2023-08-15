@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.camunda.spin</groupId>
     <artifactId>camunda-spin-bom</artifactId>
-    <version>1.11.0-SNAPSHOT</version>
+    <version>1.21.0-SNAPSHOT</version>
     <relativePath>bom</relativePath>
   </parent>
 
@@ -23,14 +23,23 @@
   </modules>
 
   <properties>
-    <jackson.version>2.12.1</jackson.version>
-    <jackson.version.databind>${jackson.version}</jackson.version.databind>
-    <commons.version>1.9.0</commons.version>
-    <spin.version.old>1.10.0</spin.version.old>
-    <groovy.version>2.4.13</groovy.version>
+    <assertj.version>2.9.1</assertj.version>
+    <commons.version>1.12.0</commons.version>
     <graal.js.version>21.1.0</graal.js.version>
+    <groovy.version>2.4.13</groovy.version>
+    <jackson.version>2.15.2</jackson.version>
+    <jaxb-impl.version>2.3.6</jaxb-impl.version>
+    <jruby.version>9.1.17.0</jruby.version>
+    <json-junit-fluent.version>1.1.6</json-junit-fluent.version>
+    <json-path.version>2.8.0</json-path.version>
+    <junit.version>4.13.1</junit.version>
+    <jython.version>2.5.3</jython.version>
+    <logback.version>1.2.11</logback.version>
+    <powermock.version>2.0.9</powermock.version>
+    <spin.version.old>1.19.0</spin.version.old>
+    <xml.bind-api.version>2.3.3</xml.bind-api.version>
+
     <license.includeTransitiveDependencies>false</license.includeTransitiveDependencies>
-    <powermock.version>1.7.4</powermock.version>
     <additionalparam>-Xdoclint:none</additionalparam>
   </properties>
 
@@ -46,15 +55,23 @@
       </dependency>
 
       <dependency>
+        <groupId>com.fasterxml.jackson</groupId>
+        <artifactId>jackson-bom</artifactId>
+        <version>${jackson.version}</version>
+        <scope>import</scope>
+        <type>pom</type>
+      </dependency>
+
+      <dependency>
         <groupId>junit</groupId>
         <artifactId>junit</artifactId>
-        <version>4.13.1</version>
+        <version>${junit.version}</version>
       </dependency>
 
       <dependency>
         <groupId>org.assertj</groupId>
         <artifactId>assertj-core</artifactId>
-        <version>2.9.1</version>
+        <version>${assertj.version}</version>
       </dependency>
 
       <dependency>
@@ -65,7 +82,7 @@
 
       <dependency>
         <groupId>org.powermock</groupId>
-        <artifactId>powermock-api-mockito</artifactId>
+        <artifactId>powermock-api-mockito2</artifactId>
         <version>${powermock.version}</version>
       </dependency>
 
@@ -78,21 +95,21 @@
       <dependency>
         <groupId>org.python</groupId>
         <artifactId>jython</artifactId>
-        <version>2.5.3</version>
+        <version>${jython.version}</version>
       </dependency>
 
       <dependency>
         <groupId>org.jruby</groupId>
         <artifactId>jruby-complete</artifactId>
-        <version>9.1.17.0</version>
+        <version>${jruby.version}</version>
       </dependency>
-      
+
       <dependency>
         <groupId>org.graalvm.js</groupId>
         <artifactId>js</artifactId>
         <version>${graal.js.version}</version>
       </dependency>
-      
+
       <dependency>
         <groupId>org.graalvm.js</groupId>
         <artifactId>js-scriptengine</artifactId>
@@ -102,37 +119,31 @@
       <dependency>
         <groupId>ch.qos.logback</groupId>
         <artifactId>logback-classic</artifactId>
-        <version>1.2.3</version>
-      </dependency>
-
-      <dependency>
-        <groupId>com.fasterxml.jackson.core</groupId>
-        <artifactId>jackson-core</artifactId>
-        <version>${jackson.version}</version>
-      </dependency>
-
-      <dependency>
-        <groupId>com.fasterxml.jackson.core</groupId>
-        <artifactId>jackson-databind</artifactId>
-        <version>${jackson.version.databind}</version>
+        <version>${logback.version}</version>
       </dependency>
 
       <dependency>
         <groupId>net.javacrumbs.json-unit</groupId>
         <artifactId>json-unit-fluent</artifactId>
-        <version>1.1.6</version>
+        <version>${json-junit-fluent.version}</version>
       </dependency>
 
       <dependency>
-        <groupId>javax.xml.bind</groupId>
-        <artifactId>jaxb-api</artifactId>
-        <version>2.2.3</version>
+        <groupId>jakarta.xml.bind</groupId>
+        <artifactId>jakarta.xml.bind-api</artifactId>
+        <version>${xml.bind-api.version}</version>
       </dependency>
 
       <dependency>
         <groupId>com.sun.xml.bind</groupId>
         <artifactId>jaxb-impl</artifactId>
-        <version>2.2.4</version>
+        <version>${jaxb-impl.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>com.jayway.jsonpath</groupId>
+        <artifactId>json-path</artifactId>
+        <version>${json-path.version}</version>
       </dependency>
 
     </dependencies>
@@ -185,6 +196,15 @@
           </plugin>
         </plugins>
       </build>
+    </profile>
+    <profile>
+      <id>jdk11</id>
+      <activation>
+        <jdk>[11,)</jdk>
+      </activation>
+      <modules>
+        <module>dataformat-xml-dom-jakarta</module>
+      </modules>
     </profile>
   </profiles>
 

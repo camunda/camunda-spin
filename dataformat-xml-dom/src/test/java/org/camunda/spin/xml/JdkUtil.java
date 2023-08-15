@@ -14,32 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.spin.spi;
+package org.camunda.spin.xml;
 
-import java.util.Map;
+public class JdkUtil {
 
-/**
- * @author Daniel Meyer
- *
- */
-public interface DataFormatProvider {
+  public static boolean runsOnIbmJDK() {
+    String vendor = System.getProperty("java.vm.vendor");
 
-  /**
-   * @return the name of the data format provided by the implementation
-   */
-  String getDataFormatName();
-
-  /**
-   * @return an instance of the data format provided by this implementation
-   */
-  DataFormat<?> createInstance();
-
-  /**
-   * @return an instance of the data format provided by this implementation configured using the
-   * passed configuration properties.
-   */
-  default DataFormat<?> createInstance(Map<String, Object> configurationProperties) {
-    return createInstance();
-  };
-
+    if (vendor == null) {
+      return false;
+    } else {
+      return vendor.contains("IBM");
+    }
+  }
 }
