@@ -1,1 +1,0 @@
-$textContent = S($input).textContent()
